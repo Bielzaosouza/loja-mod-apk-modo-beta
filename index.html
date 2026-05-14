@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Loja Mods Apks | Premium Experience</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -10,514 +10,449 @@
         :root {
             --primary: #00ffa3;
             --primary-glow: rgba(0, 255, 163, 0.3);
-            --bg: #050810;
-            --card-bg: rgba(15, 23, 42, 0.6);
+            --bg: #030712;
+            --card-bg: rgba(17, 24, 39, 0.7);
             --text: #f8fafc;
             --text-dim: #94a3b8;
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --sidebar-width: 300px;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --sidebar-width: 280px;
+            --safe-area-inset-bottom: env(safe-area-inset-bottom);
         }
 
         [data-theme="light"] {
-            --bg: #f1f5f9;
-            --card-bg: rgba(255, 255, 255, 0.7);
+            --bg: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.8);
             --text: #0f172a;
             --text-dim: #64748b;
-            --glass-border: rgba(0, 0, 0, 0.05);
+            --glass-border: rgba(0, 0, 0, 0.08);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent;
+        }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg);
             color: var(--text);
             overflow-x: hidden;
-            transition: background 0.5s ease;
+            transition: background 0.4s ease;
+            line-height: 1.5;
         }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: -10%; left: -10%;
-            width: 120%; height: 120%;
-            background: radial-gradient(circle at 50% 50%, var(--primary-glow) 0%, transparent 50%);
-            z-index: -1;
-            pointer-events: none;
+        .bg-glow {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% -20%, var(--primary-glow) 0%, transparent 70%);
+            z-index: -1; pointer-events: none;
+        }
+
+        .container { 
+            width: 100%; max-width: 1200px; 
+            margin: 0 auto; padding: 0 16px; 
         }
 
         .version-badge {
             background: rgba(0, 255, 163, 0.1);
             border: 1px solid var(--primary);
             color: var(--primary);
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-weight: 800;
-            font-size: 0.75rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            box-shadow: 0 0 15px rgba(0, 255, 163, 0.2);
-            animation: pulse-glow 2s infinite;
-            display: inline-flex;
-            align-items: center;
-            backdrop-filter: blur(5px);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-weight: 800; font-size: 0.7rem;
+            text-transform: uppercase; letter-spacing: 1px;
         }
 
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 0 5px rgba(0, 255, 163, 0.2); }
-            50% { box-shadow: 0 0 20px rgba(0, 255, 163, 0.4); }
-            100% { box-shadow: 0 0 5px rgba(0, 255, 163, 0.2); }
+        h1 { 
+            font-size: clamp(2rem, 8vw, 3.5rem); 
+            font-weight: 800; letter-spacing: -2px; 
+            line-height: 1; margin-bottom: 10px;
         }
-
-        #overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(8px);
-            display: none;
-            z-index: 900;
-        }
-
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
         .app-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px; margin-top: 40px; padding-bottom: 50px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 16px; margin-top: 30px; padding-bottom: 100px;
+        }
+
+        @media (min-width: 600px) {
+            .app-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
         }
 
         .app-card {
-            background: var(--card-bg); border-radius: 32px; padding: 30px;
-            border: 1px solid var(--glass-border); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-align: center; backdrop-filter: blur(10px);
+            background: var(--card-bg); border-radius: 24px; padding: 20px;
+            border: 1px solid var(--glass-border); backdrop-filter: blur(12px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
         }
 
-        .app-card:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .app-card img { 
+            width: clamp(60px, 15vw, 90px); 
+            height: clamp(60px, 15vw, 90px);
+            border-radius: 20px; margin-bottom: 15px; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
 
-        .app-card img { width: 90px; height: 90px; border-radius: 22px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); object-fit: cover; }
-
+        .search-container { position: sticky; top: 20px; z-index: 100; margin: 20px 0; }
         #searchBar {
-            width: 100%; max-width: 600px; background: var(--card-bg);
-            border: 1px solid var(--glass-border); padding: 20px 30px; border-radius: 24px;
-            color: var(--text); display: block; margin: 0 auto; outline: none; transition: 0.3s;
+            width: 100%; background: var(--card-bg);
+            border: 1px solid var(--glass-border); padding: 18px 25px; border-radius: 20px;
+            color: var(--text); backdrop-filter: blur(20px); outline: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: 0.3s;
         }
-
-        #searchBar:focus { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
-
-        .btn-download {
-            display: block; width: 100%; padding: 15px; border-radius: 18px;
-            background: var(--primary); color: #000; text-decoration: none;
-            font-weight: 700; transition: 0.3s; margin-top: 15px; text-align: center;
-        }
+        #searchBar:focus { border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
 
         .sidebar {
-            position: fixed; top: 0; right: -320px; width: var(--sidebar-width);
-            height: 100vh; background: var(--card-bg); backdrop-filter: blur(20px);
-            border-left: 1px solid var(--glass-border); z-index: 1000; padding: 40px 25px;
-            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: fixed; top: 0; right: -100%; width: 100%; max-width: var(--sidebar-width);
+            height: 100%; background: var(--card-bg); backdrop-filter: blur(30px);
+            z-index: 1001; padding: 30px 20px; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 1px solid var(--glass-border);
         }
-
         .sidebar.active { right: 0; }
 
-        .profile-section {
-            background: rgba(255,255,255,0.03); border-radius: 24px; padding: 20px;
-            border: 1px solid var(--glass-border); margin-bottom: 25px; text-align: center;
+        /* Profile Style */
+        .profile-img-preview {
+            width: 80px; height: 80px; border-radius: 50%;
+            object-fit: cover; border: 2px solid var(--primary);
+            margin-bottom: 10px; display: inline-block;
         }
 
-        .profile-icon {
-            width: 70px; height: 70px; background: var(--primary); border-radius: 20px;
-            display: flex; align-items: center; justify-content: center; font-size: 2rem;
-            margin: 0 auto 15px; color: #000;
+        /* Modal Styles */
+        .modal {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9);
+            width: 90%; max-width: 400px; background: var(--bg); border: 1px solid var(--glass-border);
+            padding: 25px; border-radius: 30px; z-index: 2000; opacity: 0; visibility: hidden;
+            transition: 0.3s; backdrop-filter: blur(20px);
         }
+        .modal.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
 
-        .sidebar-btn {
-            width: 100%; padding: 14px; border-radius: 16px; margin-bottom: 12px;
-            border: 1px solid var(--glass-border); background: rgba(255,255,255,0.03);
-            color: var(--text); cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 12px; transition: 0.3s;
-            text-align: left;
+        .modal-input {
+            width: 100%; padding: 12px; background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border); border-radius: 12px; color: white;
+            margin-bottom: 20px; outline: none;
         }
-
-        .sidebar-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--primary); }
 
         .chat-panel {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: var(--bg); z-index: 1100;
+            position: fixed; inset: 0; background: var(--bg); z-index: 1100;
             display: none; flex-direction: column; 
-            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
+        .chat-panel.active { display: flex; animation: slideUp 0.4s ease; }
 
-        .chat-panel.active { display: flex; }
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
 
-        @keyframes slideUp {
-            from { transform: translateY(100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        /* Floating Action Button (FAB) */
+        .fab-container {
+            position: fixed; bottom: 30px; right: 20px;
+            display: flex; flex-direction: column-reverse;
+            align-items: center; gap: 15px; z-index: 999;
         }
+        .fab-main {
+            width: 60px; height: 60px; border-radius: 50%;
+            background: var(--primary); color: #000;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; box-shadow: 0 10px 25px var(--primary-glow);
+            cursor: pointer; transition: 0.3s; border: none;
+        }
+        .fab-main.active { transform: rotate(45deg); background: #ff4d4d; }
 
-        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
+        .fab-subs {
+            display: flex; flex-direction: column; gap: 10px;
+            opacity: 0; visibility: hidden; transform: translateY(20px);
+            transition: 0.3s;
+        }
+        .fab-subs.active { opacity: 1; visibility: visible; transform: translateY(0); }
 
-        .msg-container { display: flex; flex-direction: column; gap: 4px; max-width: 85%; align-self: flex-start; margin-bottom: 5px; }
-        .msg-container.user { align-self: flex-end; align-items: flex-end; }
+        .fab-item {
+            width: 50px; height: 50px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; color: #fff; text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: 0.2s;
+        }
+        .fab-item:active { transform: scale(0.9); }
+        .yt { background: #ff0000; }
+        .tg { background: #0088cc; }
 
-        .msg-info { font-size: 0.7rem; color: var(--text-dim); }
-        .msg-bubble { padding: 10px 14px; border-radius: 15px; font-size: 0.85rem; line-height: 1.4; background: var(--card-bg); border: 1px solid var(--glass-border); word-break: break-word; }
+        .msg-container { display: flex; flex-direction: column; width: 100%; }
+        .msg-bubble { 
+            max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 0.9rem;
+            background: var(--card-bg); border: 1px solid var(--glass-border);
+            word-wrap: break-word;
+        }
+        
+        .user { align-items: flex-end; }
         .user .msg-bubble { background: var(--primary); color: #000; border-bottom-right-radius: 4px; }
+        
+        .bot { align-items: flex-start; }
         .bot .msg-bubble { border-bottom-left-radius: 4px; }
 
-        .chat-input-area { 
-            padding: 20px; 
-            border-top: 1px solid var(--glass-border); 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(10px);
-        }
-
-        .chat-input-area input[type="text"] { 
-            flex: 1; 
-            padding: 15px 20px; 
-            border-radius: 50px; 
-            border: 1px solid var(--glass-border); 
-            background: rgba(0,0,0,0.3); 
-            color: white; 
-            outline: none; 
-            font-family: inherit;
+        .chat-input-area {
+            padding: 15px; background: var(--card-bg); border-top: 1px solid var(--glass-border);
+            display: flex; align-items: center; gap: 10px; padding-bottom: calc(15px + var(--safe-area-inset-bottom));
         }
 
         .action-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 1.1rem;
+            width: 42px; height: 42px; border-radius: 50%; border: none;
+            background: rgba(255,255,255,0.05); color: var(--text);
+            display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer;
         }
 
-        .action-btn:hover {
-            background: var(--primary);
-            color: #000;
-            transform: scale(1.1);
+        #chatInput {
+            flex: 1; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border);
+            padding: 12px 20px; border-radius: 25px; color: white; outline: none;
         }
 
-        .btn-send-chat {
-            background: var(--primary);
-            color: #000;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2rem;
-            box-shadow: 0 0 15px var(--primary-glow);
+        .btn-send {
+            width: 45px; height: 45px; border-radius: 50%; background: var(--primary);
+            border: none; color: #000; font-size: 1.2rem; cursor: pointer;
         }
 
-        .recording {
-            background: #ff4d4d !important;
-            color: white !important;
-            animation: pulse-red 1s infinite;
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        .btn-download {
+            width: 100%; padding: 12px; background: var(--primary); color: #000;
+            border-radius: 14px; text-decoration: none; font-weight: 800; font-size: 0.8rem;
+            margin-top: auto; transition: 0.3s;
         }
 
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(255, 77, 77, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
+        #overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px); display: none; z-index: 900;
         }
-
-        .modal {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 90%; max-width: 400px; background: var(--card-bg); backdrop-filter: blur(25px);
-            border-radius: 28px; padding: 30px; z-index: 2000; display: none; border: 1px solid var(--glass-border);
-        }
-
-        .modal.active { display: block; animation: fadeIn 0.3s ease; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translate(-50%, -45%); } to { opacity: 1; transform: translate(-50%, -50%); } }
-
-        .social-fab-container {
-            position: fixed; bottom: 30px; right: 30px; z-index: 800;
-            display: flex; flex-direction: column-reverse; gap: 15px; align-items: center;
-        }
-
-        .social-fab-main {
-            width: 60px; height: 60px; background: var(--primary); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
-            color: #000; box-shadow: 0 10px 25px var(--primary-glow); cursor: pointer;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: none; outline: none;
-        }
-
-        .social-fab-container.active .social-fab-main { transform: scale(1.1) rotate(135deg); }
-
-        .social-fab-list {
-            display: flex; flex-direction: column; gap: 12px; opacity: 0; visibility: hidden;
-            transform: translateY(20px); transition: 0.3s ease;
-        }
-
-        .social-fab-container.active .social-fab-list { opacity: 1; visibility: visible; transform: translateY(0); }
-
-        .social-btn {
-            width: 50px; height: 50px; background: var(--card-bg); backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border); border-radius: 50%; display: flex;
-            align-items: center; justify-content: center; text-decoration: none;
-            font-size: 1.3rem; transition: 0.3s; box-shadow: 0 8px 15px rgba(0,0,0,0.2);
-        }
-
-        .social-btn.tg { color: #26A5E4; }
-        .social-btn.yt { color: #FF0000; }
-        .social-btn:hover { border-color: var(--primary); transform: scale(1.1); }
     </style>
 </head>
 <body>
 
+<div class="bg-glow"></div>
 <div id="overlay" onclick="closeAll()"></div>
 
 <input type="file" id="fileInput" style="display: none;">
 <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display: none;">
+<input type="file" id="profileUpload" accept="image/*" style="display: none;">
 
-<div class="modal" id="adblockModal">
-    <h3 style="color: #ff4d4d; margin-bottom: 15px;">⚠️ DNS Detectado</h3>
-    <p style="margin-bottom: 20px; font-size: 0.9rem;">Identificamos que você está usando o <b>dns.adguard.com</b> ou um bloqueador similar. Desative-o para garantir que o aplicativo e os downloads funcionem corretamente.</p>
-    <button class="sidebar-btn" style="background: var(--primary); color: #000; justify-content: center;" onclick="location.reload()">Já desativei, recarregar</button>
-</div>
-
-<div class="social-fab-container" id="socialFab">
-    <button class="social-fab-main" onclick="toggleFab(event)">
-        <i class="fa-solid fa-plus"></i>
-    </button>
-    <div class="social-fab-list">
-        <a href="https://youtube.com/@bymodss?feature=shared" target="_blank" class="social-btn yt"><i class="fa-brands fa-youtube"></i></a>
-        <a href="https://t.me/+dVYoSM1zh4xkZjEx" target="_blank" class="social-btn tg"><i class="fa-brands fa-telegram"></i></a>
+<div class="fab-container">
+    <button class="fab-main" id="fabMain" onclick="toggleFab()"><i class="fa-solid fa-plus"></i></button>
+    <div class="fab-subs" id="fabSubs">
+        <a href="https://youtube.com/@bymodss?feature=shared" target="_blank" class="fab-item yt"><i class="fa-brands fa-youtube"></i></a>
+        <a href="https://t.me/+dVYoSM1zh4xkZjEx" target="_blank" class="fab-item tg"><i class="fa-brands fa-telegram"></i></a>
     </div>
 </div>
 
 <div class="modal" id="profileModal">
-    <h3 id="txt-edit-title" style="margin-bottom: 20px;">Editar Perfil</h3>
-    <input type="text" id="editEmoji" maxlength="2" placeholder="Emoji (ex: 😎)" style="width:100%; padding:12px; border-radius:12px; margin-bottom:10px; background: rgba(0,0,0,0.2); border:1px solid var(--glass-border); color: white;">
-    <input type="text" id="editName" placeholder="Seu Nome" style="width:100%; padding:12px; border-radius:12px; margin-bottom:20px; background: rgba(0,0,0,0.2); border:1px solid var(--glass-border); color: white;">
-    <div style="display: flex; gap: 10px;">
-        <button class="sidebar-btn" onclick="toggleModal()">Cancelar</button>
-        <button class="sidebar-btn" style="background: var(--primary); color: #000;" onclick="saveProfile()">Salvar</button>
+    <h3 style="margin-bottom: 20px; text-align: center;">Editar Perfil</h3>
+    <div style="text-align: center; margin-bottom: 15px;">
+        <img id="modalPreview" src="https://via.placeholder.com/80" class="profile-img-preview" onclick="document.getElementById('profileUpload').click()">
+        <p style="font-size: 0.7rem; color: var(--primary); cursor: pointer;" onclick="document.getElementById('profileUpload').click()">Trocar Foto</p>
     </div>
+    <input type="text" id="newNameInput" class="modal-input" placeholder="Novo Nome...">
+    <button onclick="saveProfile()" class="btn-download" style="border:none; cursor:pointer;">SALVAR ALTERAÇÕES</button>
 </div>
 
 <div class="container">
-    <div class="nav-header" style="display: flex; justify-content: space-between; align-items: center; padding: 30px 0;">
-        <div class="version-badge">VERSÃO 1.2</div>
-        <button class="sidebar-btn" onclick="toggleMenu()" style="width: auto; margin: 0; padding: 10px 20px;">Menu ☰</button>
-    </div>
-
-    <header style="text-align: center; margin-bottom: 50px;">
-        <h1 id="txt-main-title" style="font-size: 3.5rem; font-weight: 800; letter-spacing: -2px;">LOJA MODS<span style="color: var(--primary);"> APKS</span></h1>
-        <p id="txt-main-sub" style="color: var(--text-dim); margin-top: 10px;">Elite Android Applications & Gaming Mods</p>
-        <div style="margin-top: 30px;">
-            <input type="text" id="searchBar" placeholder="Search premium apps..." oninput="filterApps()">
-        </div>
+    <header style="padding: 20px 0; display: flex; justify-content: space-between; align-items: center;">
+        <div class="version-badge">VERSÃO BETA 1.2</div>
+        <div class="action-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars-staggered"></i></div>
     </header>
 
-    <div class="app-grid" id="appGrid"></div>
+    <main style="text-align: center; margin-top: 20px;">
+        <h1>MODS<span style="color: var(--primary);"> APKS</span></h1>
+        <p style="color: var(--text-dim); font-weight: 500;">O melhor do Android está aqui.</p>
+        
+        <div class="search-container">
+            <input type="text" id="searchBar" placeholder="Pesquisar aplicativos..." oninput="filterApps()">
+        </div>
+
+        <div class="app-grid" id="appGrid"></div>
+    </main>
 </div>
 
 <div class="sidebar" id="sidebar">
-    <div style="display: flex; justify-content: space-between; margin-bottom: 30px;">
-        <h2 id="txt-menu-title">Menu</h2>
-        <span onclick="toggleMenu()" style="cursor:pointer; font-size: 1.5rem">×</span>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h2 style="font-weight: 800;">MENU</h2>
+        <div class="action-btn" onclick="toggleMenu()"><i class="fa-solid fa-xmark"></i></div>
     </div>
-
-    <div class="profile-section">
-        <button onclick="toggleModal()" style="float: right; background: none; border: none; color: var(--primary); cursor: pointer;">⚙️</button>
-        <div class="profile-icon" id="profileIcon">👤</div>
+    
+    <div class="profile-section" style="margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 20px; text-align: center;">
+        <img id="sideProfileImg" src="https://img.icons8.com/bubbles/100/000000/user.png" class="profile-img-preview">
         <h3 id="userName">@CriadorBielzao</h3>
+        <p style="color: var(--primary); font-size: 0.8rem; cursor: pointer; margin-top: 10px;" onclick="openProfileModal()">Editar Perfil</p>
     </div>
 
-    <button class="sidebar-btn" onclick="toggleChat()">
-        <span>👥</span> <span id="txt-btn-chat">Grupo Chat</span>
+    <button class="sidebar-btn" onclick="toggleChat()" style="width: 100%; padding: 15px; border-radius: 15px; border: 1px solid var(--glass-border); background: none; color: white; display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer;">
+        <i class="fa-solid fa-comments" style="color: var(--primary);"></i> Grupo Chat Global
     </button>
-
-    <select class="sidebar-btn" id="langSelect" onchange="changeLanguage(this.value)">
-        <option value="pt">🇧🇷 Português</option>
-        <option value="en">🇺🇸 English</option>
-        <option value="es">🇪🇸 Español</option>
-        <option value="fr">🇫🇷 Français</option>
-    </select>
-
-    <button class="sidebar-btn" onclick="toggleTheme()">
-        <span id="themeIcon">☀️</span> <span id="themeText">Modo Claro</span>
+    
+    <button class="sidebar-btn" onclick="toggleTheme()" style="width: 100%; padding: 15px; border-radius: 15px; border: 1px solid var(--glass-border); background: none; color: white; display: flex; align-items: center; gap: 10px; cursor: pointer;">
+        <i class="fa-solid fa-circle-half-stroke" style="color: var(--primary);"></i> Trocar Tema
     </button>
 </div>
 
 <div class="chat-panel" id="chatPanel">
-    <div style="padding: 20px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.4);">
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <div class="action-btn" onclick="toggleChat()"><i class="fa-solid fa-arrow-left"></i></div>
-            <div>
-                <h3 id="txt-chat-header" style="font-size: 1.1rem;">Chat Global Premium</h3>
-                <small style="color: var(--primary)">● <span id="onlineCount">1,452</span> Online</small>
-            </div>
+    <header style="padding: 15px 20px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; gap: 15px; background: var(--card-bg);">
+        <div class="action-btn" onclick="toggleChat()"><i class="fa-solid fa-chevron-left"></i></div>
+        <div>
+            <h4 style="font-size: 1rem;">Chat Global</h4>
+            <small style="color: var(--primary);">● 1,452 Online</small>
         </div>
-        <i class="fa-solid fa-ellipsis-vertical" style="color: var(--text-dim); cursor: pointer;"></i>
-    </div>
-    
+    </header>
+
     <div class="chat-messages" id="chatMessages"></div>
-    
+
     <div class="chat-input-area">
-        <button class="action-btn" id="btnFile" title="Enviar Arquivo"><i class="fa-solid fa-paperclip"></i></button>
-        <button class="action-btn" id="btnCamera" title="Enviar Foto"><i class="fa-solid fa-camera"></i></button>
-        
-        <input type="text" id="chatInput" placeholder="Sua mensagem..." onkeypress="handleChatKey(event)">
-        
-        <button class="action-btn" id="btnAudio" title="Mensagem de Voz"><i class="fa-solid fa-microphone"></i></button>
-        <button class="btn-send-chat" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+        <button class="action-btn" onclick="document.getElementById('fileInput').click()"><i class="fa-solid fa-paperclip"></i></button>
+        <button class="action-btn" onclick="document.getElementById('cameraInput').click()"><i class="fa-solid fa-camera"></i></button>
+        <input type="text" id="chatInput" placeholder="Sua mensagem..." onkeypress="if(event.key==='Enter') sendMessage()">
+        <button class="action-btn" id="btnAudio"><i class="fa-solid fa-microphone"></i></button>
+        <button class="btn-send" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
 </div>
 
 <script>
-    const translations = {
-        pt: { menu: "Menu", chat: "Grupo Chat", title: "LOJA MODS APKS", subtitle: "Aplicativos Elite e Mods para Android", download: "BAIXAR AGORA", search: "Buscar apps premium...", themeLight: "Modo Claro", themeDark: "Modo Escuro", editTitle: "Editar Perfil", chatHeader: "Chat Global Premium", send: "Sua mensagem..." },
-        en: { menu: "Menu", chat: "Group Chat", title: "MODS APKS STORE", subtitle: "Elite Android Applications & Gaming Mods", download: "DOWNLOAD NOW", search: "Search premium apps...", themeLight: "Light Mode", themeDark: "Dark Mode", editTitle: "Edit Profile", chatHeader: "Premium Global Chat", send: "Your message..." },
-        es: { menu: "Menú", chat: "Grupo Chat", title: "TIENDA MODS APKS", subtitle: "Apps Elite y Mods Android", download: "BAIXAR AHORA", search: "Buscar apps...", themeLight: "Modo Claro", themeDark: "Modo Oscuro", editTitle: "Editar Perfil", chatHeader: "Chat Global Premium", send: "Tu mensagem..." },
-        fr: { menu: "Menu", chat: "Groupe Chat", title: "BOUTIQUE MODS APKS", subtitle: "Apps Elite et Mods Android", download: "TÉLÉCHARGER", search: "Rechercher...", themeLight: "Mode Clair", themeDark: "Mode Sombre", editTitle: "Editer Profil", chatHeader: "Chat Global Premium", send: "Votre message..." }
-    };
-
     const appsData = [
-        { 
-            id: "spotify", 
-            name: "ATIVADOR DE PRÊMIO", 
-            mod: { pt: "RECURSOS EXTRA", en: "EXTRA FEATURES", es: "RECURSOS EXTRA", fr: "FONCTIONS EXTRA" }, 
-            img: "https://s1t1r41hptv0-d.space-z.ai/api/media/serve?shareId=cc6a92298b3f",
-            downloadLink: "https://www.mediafire.com/file/r0d0sswfi87v1f9/ATIVADOR_DE_PR%25C3%258AMIO_7.4%25283%2529_.apk/file"
-        },
-        { id: "minecraft", name: "Minecraft", mod: { pt: "Versão Completa", en: "Full Version", es: "Versión Completa", fr: "Version Complète" }, img: "https://img.icons8.com/color/120/minecraft.png", downloadLink: "#" },
-        { id: "netflix", name: "Netflix Mod", mod: { pt: "4K Desbloqueado", en: "4K Unlocked", es: "4K Desbloqueado", fr: "4K Débloqué" }, img: "https://img.icons8.com/color/120/netflix.png", downloadLink: "#" }
+        { name: "Spotify Premium", mod: "Tudo Desbloqueado", img: "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg", link: "#" },
+        { name: "Netflix Mod", mod: "4K HDR Unlocked", img: "https://www.netflix.com/favicon.ico", link: "#" },
+        { name: "Minecraft PE", mod: "Menu Mod / Skins", img: "https://img.icons8.com/color/512/minecraft.png", link: "#" },
+        { name: "WhatsApp Aero", mod: "Anti-Ban / Temas", img: "https://img.icons8.com/color/512/whatsapp.png", link: "#" }
     ];
 
-    const botTemplates = [
-        { name: "Lucas_Droid", emoji: "🤖", msgs: ["O ATIVADOR tá funcionando?", "Valeu pelo mod!", "Melhor loja", "Alguém tem o link do GTA?", "Atualizou hoje?", "Top demais"] },
-        { name: "Ana_Modz", emoji: "✨", msgs: ["Minecraft tá 100%!", "Amo esse site", "Obrigada Biel!", "Alguém testou o Netflix?", "Muito rápido o download"] },
-        { name: "GamerPro99", emoji: "🎮", msgs: ["Rodando liso no meu S24", "Antiban ativado?", "Melhor mod de todos", "Sempre saem as versões primeiro aqui"] },
-        { name: "MasterRoot", emoji: "🛠️", msgs: ["Instalando agora", "Quem mais curtiu?", "Loja elite", "Sem erros de parsing"] }
+    const fakeUsers = [
+        { name: "Lucas_Droid", emoji: "🔥" }, { name: "Ana_Modz", emoji: "✨" },
+        { name: "GamerPro99", emoji: "🎮" }, { name: "MasterRoot", emoji: "🛠️" },
+        { name: "Sarinha_Vip", emoji: "💎" }, { name: "Lobinho_Mods", emoji: "🐺" }
     ];
 
-    let currentLang = 'pt';
-    let myProfile = JSON.parse(localStorage.getItem('userProfile')) || { name: "@CriadorBielzao", emoji: "👤" };
+    const randomMsgs = [
+        "Alguém já testou o Spotify novo?", "O Netflix tá rodando em 4K liso!",
+        "Melhor loja de APK que eu já vi.", "Mano, o Minecraft tá com as skins liberadas?",
+        "Traz o mod do Free Fire depois!", "Instalei o WhatsApp Aero e tá top.",
+        "Alguém sabe se precisa de root?", "Tudo funcionando no meu S23."
+    ];
 
-    // --- CORREÇÃO HARDWARE ---
-
-    // Função de Arquivo
-    document.getElementById('btnFile').onclick = () => document.getElementById('fileInput').click();
-    document.getElementById('fileInput').onchange = function() {
-        if(this.files.length > 0) {
-            appendMessage(myProfile.name, myProfile.emoji, `📁 Arquivo: <b>${this.files[0].name}</b> enviado com sucesso!`, 'user');
-        }
+    let myProfile = { 
+        name: "@CriadorBielzao", 
+        img: "https://img.icons8.com/bubbles/100/000000/user.png" 
     };
-
-    // Função de Câmera
-    document.getElementById('btnCamera').onclick = () => document.getElementById('cameraInput').click();
-    document.getElementById('cameraInput').onchange = function() {
-        if(this.files.length > 0) {
-            appendMessage(myProfile.name, myProfile.emoji, `🖼️ Foto enviada: <i>captura_premium.png</i>`, 'user');
-        }
-    };
-
-    // Função de Áudio
-    let isRecording = false;
-    document.getElementById('btnAudio').onclick = async function() {
-        const btn = this;
-        if(!isRecording) {
-            try {
-                await navigator.mediaDevices.getUserMedia({ audio: true });
-                isRecording = true;
-                btn.classList.add('recording');
-                btn.innerHTML = '<i class="fa-solid fa-stop"></i>';
-            } catch (err) {
-                alert("Ative o microfone nas configurações!");
-            }
-        } else {
-            isRecording = false;
-            btn.classList.remove('recording');
-            btn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
-            appendMessage(myProfile.name, myProfile.emoji, `🎤 Áudio enviado: 0:12s`, 'user');
-        }
-    };
-
-    // --- FIM CORREÇÃO ---
 
     function renderApps() {
         const grid = document.getElementById('appGrid');
-        grid.innerHTML = '';
-        appsData.forEach(app => {
-            grid.innerHTML += `
-                <div class="app-card" data-name="${app.name.toLowerCase()}">
-                    <img src="${app.img}" alt="${app.name}">
-                    <h3>${app.name}</h3>
-                    <p style="color: var(--text-dim); font-size: 0.9rem;">${app.mod[currentLang]}</p>
-                    <a href="${app.downloadLink}" target="_blank" class="btn-download">${translations[currentLang].download}</a>
-                </div>
-            `;
-        });
+        grid.innerHTML = appsData.map(app => `
+            <div class="app-card" data-name="${app.name.toLowerCase()}">
+                <img src="${app.img}" alt="${app.name}">
+                <h3>${app.name}</h3>
+                <p style="color: var(--text-dim); font-size: 0.75rem; margin-bottom: 15px;">${app.mod}</p>
+                <a href="${app.link}" class="btn-download">BAIXAR</a>
+            </div>
+        `).join('');
     }
 
-    function changeLanguage(lang) {
-        currentLang = lang;
-        const t = translations[lang];
-        document.getElementById('txt-menu-title').innerText = t.menu;
-        document.getElementById('txt-btn-chat').innerText = t.chat;
-        document.getElementById('txt-main-sub').innerText = t.subtitle;
-        document.getElementById('searchBar').placeholder = t.search;
-        document.getElementById('chatInput').placeholder = t.send;
-        renderApps();
+    function toggleFab() {
+        document.getElementById('fabSubs').classList.toggle('active');
+        document.getElementById('fabMain').classList.toggle('active');
     }
 
-    function handleChatKey(e) { if(e.key === 'Enter') sendMessage(); }
+    function openProfileModal() {
+        document.getElementById('newNameInput').value = myProfile.name;
+        document.getElementById('modalPreview').src = myProfile.img;
+        document.getElementById('profileModal').classList.add('active');
+        document.getElementById('overlay').style.display = 'block';
+    }
 
-    function appendMessage(name, emoji, text, type = 'bot') {
-        const chatBox = document.getElementById('chatMessages');
-        const msgDiv = document.createElement('div');
-        msgDiv.className = `msg-container ${type}`;
-        msgDiv.innerHTML = `<div class="msg-info">${emoji} ${name}</div><div class="msg-bubble">${text}</div>`;
-        chatBox.appendChild(msgDiv);
-        chatBox.scrollTop = chatBox.scrollHeight;
+    document.getElementById('profileUpload').onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                document.getElementById('modalPreview').src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    function saveProfile() {
+        const newName = document.getElementById('newNameInput').value;
+        const newImg = document.getElementById('modalPreview').src;
+        
+        if(newName.trim() !== "") {
+            myProfile.name = newName;
+            myProfile.img = newImg;
+            
+            document.getElementById('userName').innerText = newName;
+            document.getElementById('sideProfileImg').src = newImg;
+            
+            closeAll();
+        }
+    }
+
+    function appendMessage(name, emoji, text, type) {
+        const box = document.getElementById('chatMessages');
+        const div = document.createElement('div');
+        div.className = `msg-container ${type}`;
+        
+        const icon = (type === 'user') ? `<img src="${myProfile.img}" style="width:20px;height:20px;border-radius:50%;vertical-align:middle;margin-right:5px;">` : emoji;
+
+        div.innerHTML = `
+            <small style="margin-bottom:4px; opacity:0.6; padding: 0 10px;">${icon} ${name}</small>
+            <div class="msg-bubble">${text}</div>
+        `;
+        box.appendChild(div);
+        box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' });
+        
+        if(box.children.length > 50) box.removeChild(box.firstChild);
     }
 
     function sendMessage() {
         const input = document.getElementById('chatInput');
-        if (!input.value.trim()) return;
-        appendMessage(myProfile.name, myProfile.emoji, input.value, 'user');
+        if(!input.value.trim()) return;
+        appendMessage(myProfile.name, "", input.value, 'user');
         input.value = '';
     }
 
-    function saveProfile() {
-        myProfile.name = document.getElementById('editName').value || myProfile.name;
-        myProfile.emoji = document.getElementById('editEmoji').value || myProfile.emoji;
-        updateProfileUI();
-        toggleModal();
+    function startChatSimulation() {
+        setInterval(() => {
+            const user = fakeUsers[Math.floor(Math.random() * fakeUsers.length)];
+            const msg = randomMsgs[Math.floor(Math.random() * randomMsgs.length)];
+            appendMessage(user.name, user.emoji, msg, 'bot');
+        }, 4000);
     }
 
-    function updateProfileUI() {
-        document.getElementById('userName').innerText = myProfile.name;
-        document.getElementById('profileIcon').innerText = myProfile.emoji;
+    document.getElementById('fileInput').onchange = (e) => {
+        if(e.target.files[0]) appendMessage(myProfile.name, "", `📁 Arquivo: ${e.target.files[0].name}`, 'user');
+    };
+
+    document.getElementById('cameraInput').onchange = (e) => {
+        if(e.target.files[0]) appendMessage(myProfile.name, "", `📸 Foto enviada!`, 'user');
+    };
+
+    let isRec = false;
+    document.getElementById('btnAudio').onclick = function() {
+        isRec = !isRec;
+        this.style.background = isRec ? '#ff4d4d' : 'rgba(255,255,255,0.05)';
+        if(!isRec) appendMessage(myProfile.name, "", `🎤 Áudio enviado (0:08)`, 'user');
+    };
+
+    function toggleMenu() { 
+        document.getElementById('sidebar').classList.toggle('active'); 
+        document.getElementById('overlay').style.display = document.getElementById('sidebar').classList.contains('active') ? 'block' : 'none';
     }
 
-    function toggleFab(e) { e.stopPropagation(); document.getElementById('socialFab').classList.toggle('active'); }
-    function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').style.display = 'block'; }
     function toggleChat() { document.getElementById('chatPanel').classList.toggle('active'); }
-    function toggleModal() { document.getElementById('profileModal').classList.toggle('active'); }
-    function closeAll() { document.getElementById('sidebar').classList.remove('active'); document.getElementById('overlay').style.display = 'none'; }
+    
+    function closeAll() { 
+        document.getElementById('sidebar').classList.remove('active'); 
+        document.getElementById('profileModal').classList.remove('active');
+        document.getElementById('overlay').style.display = 'none'; 
+        document.getElementById('fabSubs').classList.remove('active');
+        document.getElementById('fabMain').classList.remove('active');
+    }
+    
     function filterApps() {
         const val = document.getElementById('searchBar').value.toLowerCase();
-        document.querySelectorAll('.app-card').forEach(c => c.style.display = c.dataset.name.includes(val) ? 'block' : 'none');
+        document.querySelectorAll('.app-card').forEach(card => {
+            card.style.display = card.dataset.name.includes(val) ? 'flex' : 'none';
+        });
     }
 
-    function toggleTheme() {
-        const b = document.body;
-        b.dataset.theme = b.dataset.theme === 'light' ? '' : 'light';
-    }
+    function toggleTheme() { document.body.dataset.theme = document.body.dataset.theme === 'light' ? '' : 'light'; }
 
-    renderApps();
-    updateProfileUI();
+    window.onload = () => { renderApps(); startChatSimulation(); };
 </script>
 </body>
 </html>
