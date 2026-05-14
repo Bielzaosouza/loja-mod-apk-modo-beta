@@ -216,7 +216,6 @@
             box-shadow: 0 0 15px var(--primary-glow);
         }
 
-        /* Estilo para quando o microfone está gravando */
         .recording {
             background: #ff4d4d !important;
             color: white !important;
@@ -405,56 +404,46 @@
     let currentLang = 'pt';
     let myProfile = JSON.parse(localStorage.getItem('userProfile')) || { name: "@CriadorBielzao", emoji: "👤" };
 
-    // --- Lógica de Hardware (Câmera, Arquivo e Áudio) ---
+    // --- CORREÇÃO HARDWARE ---
 
-    // 1. Lógica do Botão de Arquivo
+    // Função de Arquivo
     document.getElementById('btnFile').onclick = () => document.getElementById('fileInput').click();
     document.getElementById('fileInput').onchange = function() {
         if(this.files.length > 0) {
-            appendMessage(myProfile.name, myProfile.emoji, `📎 Enviou um arquivo: ${this.files[0].name}`, 'user');
+            appendMessage(myProfile.name, myProfile.emoji, `📁 Arquivo: <b>${this.files[0].name}</b> enviado com sucesso!`, 'user');
         }
     };
 
-    // 2. Lógica do Botão de Câmera
+    // Função de Câmera
     document.getElementById('btnCamera').onclick = () => document.getElementById('cameraInput').click();
     document.getElementById('cameraInput').onchange = function() {
         if(this.files.length > 0) {
-            appendMessage(myProfile.name, myProfile.emoji, `📸 Foto capturada com sucesso!`, 'user');
+            appendMessage(myProfile.name, myProfile.emoji, `🖼️ Foto enviada: <i>captura_premium.png</i>`, 'user');
         }
     };
 
-    // 3. Lógica do Botão de Áudio (Pedindo permissão e simulando gravação)
+    // Função de Áudio
     let isRecording = false;
     document.getElementById('btnAudio').onclick = async function() {
         const btn = this;
         if(!isRecording) {
             try {
-                // Solicita permissão do microfone
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                await navigator.mediaDevices.getUserMedia({ audio: true });
                 isRecording = true;
                 btn.classList.add('recording');
                 btn.innerHTML = '<i class="fa-solid fa-stop"></i>';
-                console.log("Gravando...");
-                
-                // Para a gravação após 3 segundos automaticamente ou ao clicar denovo
-                setTimeout(() => { if(isRecording) stopRecording(btn, stream); }, 5000);
             } catch (err) {
-                alert("Permissão de microfone negada ou não suportada.");
+                alert("Ative o microfone nas configurações!");
             }
         } else {
-            stopRecording(btn);
+            isRecording = false;
+            btn.classList.remove('recording');
+            btn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+            appendMessage(myProfile.name, myProfile.emoji, `🎤 Áudio enviado: 0:12s`, 'user');
         }
     };
 
-    function stopRecording(btn, stream) {
-        isRecording = false;
-        btn.classList.remove('recording');
-        btn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
-        appendMessage(myProfile.name, myProfile.emoji, `🎤 Mensagem de voz enviada.`, 'user');
-        if(stream) stream.getTracks().forEach(track => track.stop());
-    }
-
-    // --- Fim da Lógica de Hardware ---
+    // --- FIM CORREÇÃO ---
 
     function renderApps() {
         const grid = document.getElementById('appGrid');
@@ -479,8 +468,6 @@
         document.getElementById('txt-main-sub').innerText = t.subtitle;
         document.getElementById('searchBar').placeholder = t.search;
         document.getElementById('chatInput').placeholder = t.send;
-        document.getElementById('txt-chat-header').innerText = t.chatHeader;
-        document.getElementById('txt-edit-title').innerText = t.editTitle;
         renderApps();
     }
 
@@ -488,116 +475,49 @@
 
     function appendMessage(name, emoji, text, type = 'bot') {
         const chatBox = document.getElementById('chatMessages');
-        if(!chatBox) return;
         const msgDiv = document.createElement('div');
         msgDiv.className = `msg-container ${type}`;
-        
-        msgDiv.innerHTML = `
-            <div class="msg-info">${emoji} ${name}</div>
-            <div class="msg-bubble">${text}</div>
-        `;
-        
+        msgDiv.innerHTML = `<div class="msg-info">${emoji} ${name}</div><div class="msg-bubble">${text}</div>`;
         chatBox.appendChild(msgDiv);
         chatBox.scrollTop = chatBox.scrollHeight;
-        
-        if(chatBox.children.length > 50) chatBox.removeChild(chatBox.children[0]);
     }
 
     function sendMessage() {
         const input = document.getElementById('chatInput');
-        const text = input.value.trim();
-        if (!text) return;
-        appendMessage(myProfile.name, myProfile.emoji, text, 'user');
+        if (!input.value.trim()) return;
+        appendMessage(myProfile.name, myProfile.emoji, input.value, 'user');
         input.value = '';
     }
 
-    function startInfiniteBots() {
-        setInterval(() => {
-            if (document.getElementById('chatPanel').classList.contains('active')) {
-                const bot = botTemplates[Math.floor(Math.random() * botTemplates.length)];
-                const msg = bot.msgs[Math.floor(Math.random() * bot.msgs.length)];
-                appendMessage(bot.name, bot.emoji, msg, 'bot');
-                
-                const count = Math.floor(Math.random() * 500) + 1200;
-                document.getElementById('onlineCount').innerText = count.toLocaleString();
-            }
-        }, 3000);
-    }
-
     function saveProfile() {
-        const newName = document.getElementById('editName').value;
-        const newEmoji = document.getElementById('editEmoji').value;
-        if (newName) myProfile.name = newName;
-        if (newEmoji) myProfile.emoji = newEmoji;
-        localStorage.setItem('userProfile', JSON.stringify(myProfile));
+        myProfile.name = document.getElementById('editName').value || myProfile.name;
+        myProfile.emoji = document.getElementById('editEmoji').value || myProfile.emoji;
         updateProfileUI();
         toggleModal();
     }
 
     function updateProfileUI() {
-        document.getElementById('userName').innerText = myProfile.name.startsWith('@') ? myProfile.name : '@' + myProfile.name;
+        document.getElementById('userName').innerText = myProfile.name;
         document.getElementById('profileIcon').innerText = myProfile.emoji;
     }
 
-    function toggleFab(event) {
-        event.stopPropagation();
-        document.getElementById('socialFab').classList.toggle('active');
-    }
-
-    function toggleMenu() { 
-        document.getElementById('sidebar').classList.toggle('active'); 
-        toggleOverlay(); 
-    }
-
-    function toggleChat() { 
-        document.getElementById('chatPanel').classList.toggle('active'); 
-    }
-
-    function toggleModal() { 
-        document.getElementById('profileModal').classList.toggle('active'); 
-        toggleOverlay(); 
-    }
-
-    function toggleOverlay() {
-        const overlay = document.getElementById('overlay');
-        const anyActive = document.querySelector('.sidebar.active, .modal.active');
-        overlay.style.display = anyActive ? 'block' : 'none';
-    }
-
-    function closeAll() {
-        document.getElementById('sidebar').classList.remove('active');
-        document.getElementById('profileModal').classList.remove('active');
-        toggleOverlay();
-    }
-
+    function toggleFab(e) { e.stopPropagation(); document.getElementById('socialFab').classList.toggle('active'); }
+    function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').style.display = 'block'; }
+    function toggleChat() { document.getElementById('chatPanel').classList.toggle('active'); }
+    function toggleModal() { document.getElementById('profileModal').classList.toggle('active'); }
+    function closeAll() { document.getElementById('sidebar').classList.remove('active'); document.getElementById('overlay').style.display = 'none'; }
     function filterApps() {
-        const input = document.getElementById('searchBar').value.toLowerCase();
-        const cards = document.querySelectorAll('.app-card');
-        cards.forEach(card => {
-            const name = card.getAttribute('data-name');
-            card.style.display = name.includes(input) ? 'block' : 'none';
-        });
+        const val = document.getElementById('searchBar').value.toLowerCase();
+        document.querySelectorAll('.app-card').forEach(c => c.style.display = c.dataset.name.includes(val) ? 'block' : 'none');
     }
 
     function toggleTheme() {
-        const body = document.body;
-        const icon = document.getElementById('themeIcon');
-        const text = document.getElementById('themeText');
-        
-        if (body.getAttribute('data-theme') === 'light') {
-            body.removeAttribute('data-theme');
-            icon.innerText = '☀️';
-            text.innerText = translations[currentLang].themeLight;
-        } else {
-            body.setAttribute('data-theme', 'light');
-            icon.innerText = '🌙';
-            text.innerText = translations[currentLang].themeDark;
-        }
+        const b = document.body;
+        b.dataset.theme = b.dataset.theme === 'light' ? '' : 'light';
     }
 
     renderApps();
     updateProfileUI();
-    startInfiniteBots();
 </script>
 </body>
 </html>
