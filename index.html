@@ -46,7 +46,6 @@
             pointer-events: none;
         }
 
-        /* ESTILO BONITO PARA O BADGE DE VERSÃO */
         .version-badge {
             background: rgba(0, 255, 163, 0.1);
             border: 1px solid var(--primary);
@@ -140,13 +139,18 @@
         .sidebar-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--primary); }
 
         .chat-panel {
-            position: fixed; top: 0; right: -100%; width: 100%; max-width: 450px;
-            height: 100vh; background: var(--bg); z-index: 1100;
-            transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1); display: flex;
-            flex-direction: column; border-left: 1px solid var(--glass-border);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: var(--bg); z-index: 1100;
+            display: none; flex-direction: column; 
+            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .chat-panel.active { right: 0; }
+        .chat-panel.active { display: flex; }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
 
         .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
 
@@ -158,8 +162,72 @@
         .user .msg-bubble { background: var(--primary); color: #000; border-bottom-right-radius: 4px; }
         .bot .msg-bubble { border-bottom-left-radius: 4px; }
 
-        .chat-input-area { padding: 15px; border-top: 1px solid var(--glass-border); display: flex; gap: 8px; }
-        .chat-input-area input { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); color: white; outline: none; }
+        .chat-input-area { 
+            padding: 20px; 
+            border-top: 1px solid var(--glass-border); 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-input-area input[type="text"] { 
+            flex: 1; 
+            padding: 15px 20px; 
+            border-radius: 50px; 
+            border: 1px solid var(--glass-border); 
+            background: rgba(0,0,0,0.3); 
+            color: white; 
+            outline: none; 
+            font-family: inherit;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1.1rem;
+        }
+
+        .action-btn:hover {
+            background: var(--primary);
+            color: #000;
+            transform: scale(1.1);
+        }
+
+        .btn-send-chat {
+            background: var(--primary);
+            color: #000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        /* Estilo para quando o microfone está gravando */
+        .recording {
+            background: #ff4d4d !important;
+            color: white !important;
+            animation: pulse-red 1s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 77, 77, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
+        }
 
         .modal {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -207,6 +275,9 @@
 <body>
 
 <div id="overlay" onclick="closeAll()"></div>
+
+<input type="file" id="fileInput" style="display: none;">
+<input type="file" id="cameraInput" accept="image/*" capture="environment" style="display: none;">
 
 <div class="modal" id="adblockModal">
     <h3 style="color: #ff4d4d; margin-bottom: 15px;">⚠️ DNS Detectado</h3>
@@ -280,26 +351,36 @@
 </div>
 
 <div class="chat-panel" id="chatPanel">
-    <div style="padding: 25px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;">
-        <div>
-            <h3 id="txt-chat-header">Chat 24 horas</h3>
-            <small style="color: var(--primary)">● <span id="onlineCount">1,452</span> Online</small>
+    <div style="padding: 20px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.4);">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="action-btn" onclick="toggleChat()"><i class="fa-solid fa-arrow-left"></i></div>
+            <div>
+                <h3 id="txt-chat-header" style="font-size: 1.1rem;">Chat Global Premium</h3>
+                <small style="color: var(--primary)">● <span id="onlineCount">1,452</span> Online</small>
+            </div>
         </div>
-        <span onclick="toggleChat()" style="cursor:pointer; font-size: 1.5rem">×</span>
+        <i class="fa-solid fa-ellipsis-vertical" style="color: var(--text-dim); cursor: pointer;"></i>
     </div>
+    
     <div class="chat-messages" id="chatMessages"></div>
+    
     <div class="chat-input-area">
+        <button class="action-btn" id="btnFile" title="Enviar Arquivo"><i class="fa-solid fa-paperclip"></i></button>
+        <button class="action-btn" id="btnCamera" title="Enviar Foto"><i class="fa-solid fa-camera"></i></button>
+        
         <input type="text" id="chatInput" placeholder="Sua mensagem..." onkeypress="handleChatKey(event)">
-        <button class="sidebar-btn" onclick="sendMessage()" style="width: auto; margin: 0; padding: 10px;">➤</button>
+        
+        <button class="action-btn" id="btnAudio" title="Mensagem de Voz"><i class="fa-solid fa-microphone"></i></button>
+        <button class="btn-send-chat" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
 </div>
 
 <script>
     const translations = {
-        pt: { menu: "Menu", chat: "Grupo Chat", title: "LOJA MODS APKS", subtitle: "Aplicativos Elite e Mods para Android", download: "BAIXAR AGORA", search: "Buscar apps premium...", themeLight: "Modo Claro", themeDark: "Modo Escuro", editTitle: "Editar Perfil", chatHeader: "Chat 24 horas", send: "Sua mensagem..." },
-        en: { menu: "Menu", chat: "Group Chat", title: "MODS APKS STORE", subtitle: "Elite Android Applications & Gaming Mods", download: "DOWNLOAD NOW", search: "Search premium apps...", themeLight: "Light Mode", themeDark: "Dark Mode", editTitle: "Edit Profile", chatHeader: "24h Chat", send: "Your message..." },
-        es: { menu: "Menú", chat: "Grupo Chat", title: "TIENDA MODS APKS", subtitle: "Apps Elite y Mods Android", download: "BAIXAR AHORA", search: "Buscar apps...", themeLight: "Modo Claro", themeDark: "Modo Oscuro", editTitle: "Editar Perfil", chatHeader: "Chat 24h", send: "Tu mensagem..." },
-        fr: { menu: "Menu", chat: "Groupe Chat", title: "BOUTIQUE MODS APKS", subtitle: "Apps Elite et Mods Android", download: "TÉLÉCHARGER", search: "Rechercher...", themeLight: "Mode Clair", themeDark: "Mode Sombre", editTitle: "Editer Profil", chatHeader: "Chat 24h", send: "Votre message..." }
+        pt: { menu: "Menu", chat: "Grupo Chat", title: "LOJA MODS APKS", subtitle: "Aplicativos Elite e Mods para Android", download: "BAIXAR AGORA", search: "Buscar apps premium...", themeLight: "Modo Claro", themeDark: "Modo Escuro", editTitle: "Editar Perfil", chatHeader: "Chat Global Premium", send: "Sua mensagem..." },
+        en: { menu: "Menu", chat: "Group Chat", title: "MODS APKS STORE", subtitle: "Elite Android Applications & Gaming Mods", download: "DOWNLOAD NOW", search: "Search premium apps...", themeLight: "Light Mode", themeDark: "Dark Mode", editTitle: "Edit Profile", chatHeader: "Premium Global Chat", send: "Your message..." },
+        es: { menu: "Menú", chat: "Grupo Chat", title: "TIENDA MODS APKS", subtitle: "Apps Elite y Mods Android", download: "BAIXAR AHORA", search: "Buscar apps...", themeLight: "Modo Claro", themeDark: "Modo Oscuro", editTitle: "Editar Perfil", chatHeader: "Chat Global Premium", send: "Tu mensagem..." },
+        fr: { menu: "Menu", chat: "Groupe Chat", title: "BOUTIQUE MODS APKS", subtitle: "Apps Elite et Mods Android", download: "TÉLÉCHARGER", search: "Rechercher...", themeLight: "Mode Clair", themeDark: "Mode Sombre", editTitle: "Editer Profil", chatHeader: "Chat Global Premium", send: "Votre message..." }
     };
 
     const appsData = [
@@ -323,6 +404,57 @@
 
     let currentLang = 'pt';
     let myProfile = JSON.parse(localStorage.getItem('userProfile')) || { name: "@CriadorBielzao", emoji: "👤" };
+
+    // --- Lógica de Hardware (Câmera, Arquivo e Áudio) ---
+
+    // 1. Lógica do Botão de Arquivo
+    document.getElementById('btnFile').onclick = () => document.getElementById('fileInput').click();
+    document.getElementById('fileInput').onchange = function() {
+        if(this.files.length > 0) {
+            appendMessage(myProfile.name, myProfile.emoji, `📎 Enviou um arquivo: ${this.files[0].name}`, 'user');
+        }
+    };
+
+    // 2. Lógica do Botão de Câmera
+    document.getElementById('btnCamera').onclick = () => document.getElementById('cameraInput').click();
+    document.getElementById('cameraInput').onchange = function() {
+        if(this.files.length > 0) {
+            appendMessage(myProfile.name, myProfile.emoji, `📸 Foto capturada com sucesso!`, 'user');
+        }
+    };
+
+    // 3. Lógica do Botão de Áudio (Pedindo permissão e simulando gravação)
+    let isRecording = false;
+    document.getElementById('btnAudio').onclick = async function() {
+        const btn = this;
+        if(!isRecording) {
+            try {
+                // Solicita permissão do microfone
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                isRecording = true;
+                btn.classList.add('recording');
+                btn.innerHTML = '<i class="fa-solid fa-stop"></i>';
+                console.log("Gravando...");
+                
+                // Para a gravação após 3 segundos automaticamente ou ao clicar denovo
+                setTimeout(() => { if(isRecording) stopRecording(btn, stream); }, 5000);
+            } catch (err) {
+                alert("Permissão de microfone negada ou não suportada.");
+            }
+        } else {
+            stopRecording(btn);
+        }
+    };
+
+    function stopRecording(btn, stream) {
+        isRecording = false;
+        btn.classList.remove('recording');
+        btn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+        appendMessage(myProfile.name, myProfile.emoji, `🎤 Mensagem de voz enviada.`, 'user');
+        if(stream) stream.getTracks().forEach(track => track.stop());
+    }
+
+    // --- Fim da Lógica de Hardware ---
 
     function renderApps() {
         const grid = document.getElementById('appGrid');
@@ -407,8 +539,11 @@
         document.getElementById('profileIcon').innerText = myProfile.emoji;
     }
 
-    function toggleFab(e) { e.stopPropagation(); document.getElementById('socialFab').classList.toggle('active'); }
-    
+    function toggleFab(event) {
+        event.stopPropagation();
+        document.getElementById('socialFab').classList.toggle('active');
+    }
+
     function toggleMenu() { 
         document.getElementById('sidebar').classList.toggle('active'); 
         toggleOverlay(); 
@@ -416,7 +551,6 @@
 
     function toggleChat() { 
         document.getElementById('chatPanel').classList.toggle('active'); 
-        toggleOverlay(); 
     }
 
     function toggleModal() { 
@@ -426,13 +560,12 @@
 
     function toggleOverlay() {
         const overlay = document.getElementById('overlay');
-        const anyActive = document.querySelector('.sidebar.active, .chat-panel.active, .modal.active');
+        const anyActive = document.querySelector('.sidebar.active, .modal.active');
         overlay.style.display = anyActive ? 'block' : 'none';
     }
 
     function closeAll() {
         document.getElementById('sidebar').classList.remove('active');
-        document.getElementById('chatPanel').classList.remove('active');
         document.getElementById('profileModal').classList.remove('active');
         toggleOverlay();
     }
@@ -462,7 +595,6 @@
         }
     }
 
-    // Initialize
     renderApps();
     updateProfileUI();
     startInfiniteBots();
