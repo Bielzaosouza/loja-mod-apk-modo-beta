@@ -3,456 +3,897 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Loja Mods Apks | Premium Experience</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>bymods | Ultra Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary: #00ffa3;
-            --primary-glow: rgba(0, 255, 163, 0.3);
-            --bg: #030712;
-            --card-bg: rgba(17, 24, 39, 0.7);
-            --text: #f8fafc;
+            --primary: #00ff88;
+            --primary-glow: rgba(0, 255, 136, 0.3);
+            --secondary: #00bdff;
+            --bg-dark: #050505;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
             --text-dim: #94a3b8;
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --sidebar-width: 280px;
-            --safe-area-inset-bottom: env(safe-area-inset-bottom);
-        }
-
-        [data-theme="light"] {
-            --bg: #f8fafc;
-            --card-bg: rgba(255, 255, 255, 0.8);
-            --text: #0f172a;
-            --text-dim: #64748b;
-            --glass-border: rgba(0, 0, 0, 0.08);
-        }
-
-        * { 
-            margin: 0; padding: 0; box-sizing: border-box; 
-            -webkit-tap-highlight-color: transparent;
+            --nav-height: 70px;
+            --bottom-nav-height: 75px;
+            --danger: #ff4757;
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(0, 255, 136, 0.05) 0%, transparent 25%),
+                radial-gradient(circle at 100% 100%, rgba(0, 189, 255, 0.05) 0%, transparent 25%);
+            color: var(--text-main);
+            margin: 0;
+            padding-top: var(--nav-height);
+            padding-bottom: calc(var(--bottom-nav-height) + 30px);
             overflow-x: hidden;
-            transition: background 0.4s ease;
-            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            width: 100%;
         }
 
-        .bg-glow {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% -20%, var(--primary-glow) 0%, transparent 70%);
-            z-index: -1; pointer-events: none;
+        @media (max-width: 480px) {
+            :root {
+                --nav-height: 60px;
+                --bottom-nav-height: 65px;
+            }
+            .container {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px !important;
+                padding: 15px !important;
+            }
+            .app-logo { width: 65px !important; height: 65px !important; }
+            .logo-wrapper { height: 100px !important; }
+            .hero h2 { font-size: 1.5rem; }
+            .login-card { padding: 30px 20px; border-radius: 20px; width: 90%; }
         }
 
-        .container { 
-            width: 100%; max-width: 1200px; 
-            margin: 0 auto; padding: 0 16px; 
+        #login-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-dark);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: 0.5s;
         }
 
-        .version-badge {
-            background: rgba(0, 255, 163, 0.1);
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            padding: 6px 16px;
-            border-radius: 100px;
-            font-weight: 800; font-size: 0.7rem;
-            text-transform: uppercase; letter-spacing: 1px;
+        .login-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            padding: 40px 30px;
+            border-radius: 30px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
-        h1 { 
-            font-size: clamp(2rem, 8vw, 3.5rem); 
-            font-weight: 800; letter-spacing: -2px; 
-            line-height: 1; margin-bottom: 10px;
+        .login-card h1 {
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .app-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 16px; margin-top: 30px; padding-bottom: 100px;
+        .input-group {
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
         }
 
-        @media (min-width: 600px) {
-            .app-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
+        .login-input {
+            width: 100%;
+            padding: 15px;
+            padding-right: 45px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--card-border);
+            border-radius: 15px;
+            color: white;
+            outline: none;
+            box-sizing: border-box;
+            font-size: 16px;
         }
 
-        .app-card {
-            background: var(--card-bg); border-radius: 24px; padding: 20px;
-            border: 1px solid var(--glass-border); backdrop-filter: blur(12px);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s;
-            display: flex; flex-direction: column; align-items: center; text-align: center;
-        }
-
-        .app-card img { 
-            width: clamp(60px, 15vw, 90px); 
-            height: clamp(60px, 15vw, 90px);
-            border-radius: 20px; margin-bottom: 15px; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
-
-        .search-container { position: sticky; top: 20px; z-index: 100; margin: 20px 0; }
-        #searchBar {
-            width: 100%; background: var(--card-bg);
-            border: 1px solid var(--glass-border); padding: 18px 25px; border-radius: 20px;
-            color: var(--text); backdrop-filter: blur(20px); outline: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: 0.3s;
-        }
-        #searchBar:focus { border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
-
-        .sidebar {
-            position: fixed; top: 0; right: -100%; width: 100%; max-width: var(--sidebar-width);
-            height: 100%; background: var(--card-bg); backdrop-filter: blur(30px);
-            z-index: 1001; padding: 30px 20px; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border-left: 1px solid var(--glass-border);
-        }
-        .sidebar.active { right: 0; }
-
-        /* Profile Style */
-        .profile-img-preview {
-            width: 80px; height: 80px; border-radius: 50%;
-            object-fit: cover; border: 2px solid var(--primary);
-            margin-bottom: 10px; display: inline-block;
-        }
-
-        /* Modal Styles */
-        .modal {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9);
-            width: 90%; max-width: 400px; background: var(--bg); border: 1px solid var(--glass-border);
-            padding: 25px; border-radius: 30px; z-index: 2000; opacity: 0; visibility: hidden;
-            transition: 0.3s; backdrop-filter: blur(20px);
-        }
-        .modal.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
-
-        .modal-input {
-            width: 100%; padding: 12px; background: rgba(255,255,255,0.05);
-            border: 1px solid var(--glass-border); border-radius: 12px; color: white;
-            margin-bottom: 20px; outline: none;
-        }
-
-        .chat-panel {
-            position: fixed; inset: 0; background: var(--bg); z-index: 1100;
-            display: none; flex-direction: column; 
-        }
-        .chat-panel.active { display: flex; animation: slideUp 0.4s ease; }
-
-        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
-
-        /* Floating Action Button (FAB) */
-        .fab-container {
-            position: fixed; bottom: 30px; right: 20px;
-            display: flex; flex-direction: column-reverse;
-            align-items: center; gap: 15px; z-index: 999;
-        }
-        .fab-main {
-            width: 60px; height: 60px; border-radius: 50%;
-            background: var(--primary); color: #000;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; box-shadow: 0 10px 25px var(--primary-glow);
-            cursor: pointer; transition: 0.3s; border: none;
-        }
-        .fab-main.active { transform: rotate(45deg); background: #ff4d4d; }
-
-        .fab-subs {
-            display: flex; flex-direction: column; gap: 10px;
-            opacity: 0; visibility: hidden; transform: translateY(20px);
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 1.1rem;
             transition: 0.3s;
         }
-        .fab-subs.active { opacity: 1; visibility: visible; transform: translateY(0); }
 
-        .fab-item {
-            width: 50px; height: 50px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; color: #fff; text-decoration: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: 0.2s;
+        .toggle-password:hover {
+            color: var(--primary);
         }
-        .fab-item:active { transform: scale(0.9); }
-        .yt { background: #ff0000; }
-        .tg { background: #0088cc; }
 
-        .msg-container { display: flex; flex-direction: column; width: 100%; }
-        .msg-bubble { 
-            max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 0.9rem;
-            background: var(--card-bg); border: 1px solid var(--glass-border);
-            word-wrap: break-word;
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #000;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-google {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--card-border);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 15px;
+        }
+
+        .btn-google:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--secondary);
+        }
+
+        .hidden { display: none !important; }
+
+        nav.top-nav {
+            height: var(--nav-height);
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 24px; position: fixed; top: 0; width: 100%; box-sizing: border-box; z-index: 1000;
+        }
+
+        .logo {
+            font-weight: 800; font-size: 1.4rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none;
+        }
+
+        .page { display: none; animation: slideUp 0.5s ease; width: 100%; }
+        .page.active { display: block; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .container { padding: 24px; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; width: 100%; box-sizing: border-box; }
+        
+        .app-card { background: var(--card-bg); border-radius: 28px; border: 1px solid var(--card-border); overflow: hidden; }
+        .logo-wrapper { height: 130px; display: flex; align-items: center; justify-content: center; }
+        .app-logo { width: 80px; height: 80px; border-radius: 18px; object-fit: cover; }
+        .app-info { padding: 15px; text-align: center; }
+        
+        .btn-download { 
+            display: block; width: 100%; background: linear-gradient(135deg, var(--primary), #00a357); 
+            color: #000; padding: 12px 0; border-radius: 14px; font-weight: 800; text-decoration: none; font-size: 0.8rem;
+        }
+
+        .chat-container { display: flex; flex-direction: column; height: calc(100vh - 180px); }
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        
+        .message-wrapper { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 5px; }
+        .message-wrapper.user-msg { flex-direction: row-reverse; }
+        .chat-avatar { width: 35px; height: 35px; border-radius: 50%; background: #222; border: 1px solid var(--card-border); object-fit: cover; cursor: pointer; }
+        
+        .chat-bot-icon { 
+            width: 35px; height: 35px; border-radius: 50%; 
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 189, 255, 0.2)); 
+            border: 1px solid var(--primary); display: flex; align-items: center; justify-content: center; 
+            color: var(--primary); cursor: pointer; box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .message-content-box { display: flex; flex-direction: column; max-width: 75%; }
+        .message-wrapper.user-msg .message-content-box { align-items: flex-end; }
+        .chat-username { font-size: 0.75rem; color: var(--text-dim); font-weight: 600; margin-bottom: 2px; padding: 0 5px; cursor: pointer; }
+        .chat-username:hover { color: var(--primary); }
+        .message-bubble { padding: 12px; border-radius: 15px; background: var(--card-bg); border: 1px solid var(--card-border); font-size: 0.9rem; word-break: break-word; }
+        .message-wrapper.user-msg .message-bubble { background: rgba(0, 255, 136, 0.1); border-color: rgba(0, 255, 136, 0.2); }
+
+        .chat-input-area { padding: 15px; display: flex; gap: 10px; align-items: center; background: rgba(0,0,0,0.2); }
+        .chat-main-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); padding: 12px; border-radius: 20px; color: white; outline: none; }
+
+        .profile-container { padding: 20px; max-width: 500px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+        .avatar-wrapper { position: relative; width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 3px; margin: 0 auto 15px; cursor: pointer; }
+        .profile-pic { width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background: #111; }
+        .profile-pic img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .profile-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px; color: white; margin-top: 10px; box-sizing: border-box; }
+
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: var(--bottom-nav-height); background: rgba(10,10,10,0.9); backdrop-filter: blur(15px); border-top: 1px solid var(--card-border); display: flex; align-items: center; z-index: 2000; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; color: var(--text-dim); font-size: 0.7rem; cursor: pointer; }
+        .nav-item.active { color: var(--primary); }
+        .nav-item i { font-size: 1.2rem; margin-bottom: 3px; }
+
+        .btn-publish { 
+            display: flex; 
+            position: fixed; bottom: 90px; right: 20px; 
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+            width: 55px; height: 55px; border-radius: 50%; 
+            align-items: center; justify-content: center; color: #000; 
+            z-index: 2100; box-shadow: 0 5px 15px var(--primary-glow); 
+            cursor: pointer;
         }
         
-        .user { align-items: flex-end; }
-        .user .msg-bubble { background: var(--primary); color: #000; border-bottom-right-radius: 4px; }
+        .badge { position: absolute; top: 15px; right: 22px; width: 8px; height: 8px; background: var(--danger); border-radius: 50%; }
         
-        .bot { align-items: flex-start; }
-        .bot .msg-bubble { border-bottom-left-radius: 4px; }
+        .edit-name-btn { margin-left: 10px; font-size: 1.1rem; color: var(--text-dim); cursor: pointer; transition: 0.3s; }
+        .edit-name-btn:hover { color: var(--primary); }
 
-        .chat-input-area {
-            padding: 15px; background: var(--card-bg); border-top: 1px solid var(--glass-border);
-            display: flex; align-items: center; gap: 10px; padding-bottom: calc(15px + var(--safe-area-inset-bottom));
+        .public-profile-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 5, 5, 0.9); backdrop-filter: blur(25px);
+            z-index: 3000; display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: 0.4s ease; padding: 20px; box-sizing: border-box;
         }
-
-        .action-btn {
-            width: 42px; height: 42px; border-radius: 50%; border: none;
-            background: rgba(255,255,255,0.05); color: var(--text);
-            display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer;
+        .public-profile-overlay.active { opacity: 1; pointer-events: auto; }
+        .public-profile-card {
+            background: rgba(255, 255, 255, 0.04); border: 1px solid var(--card-border);
+            border-radius: 32px; padding: 35px 25px; width: 100%; max-width: 420px;
+            text-align: center; position: relative; transform: scale(0.85); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-
-        #chatInput {
-            flex: 1; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border);
-            padding: 12px 20px; border-radius: 25px; color: white; outline: none;
+        .public-profile-overlay.active .public-profile-card { transform: scale(1); }
+        .close-profile-btn {
+            position: absolute; top: 20px; right: 20px; width: 40px; height: 40px;
+            background: rgba(255,255,255,0.05); border: 1px solid var(--card-border);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: white; cursor: pointer; transition: 0.3s;
         }
+        .close-profile-btn:hover { background: var(--danger); color: white; }
 
-        .btn-send {
-            width: 45px; height: 45px; border-radius: 50%; background: var(--primary);
-            border: none; color: #000; font-size: 1.2rem; cursor: pointer;
+        .publish-container { padding: 20px; max-width: 500px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+        .file-select-area {
+            border: 2px dashed var(--card-border); padding: 30px; border-radius: 20px;
+            text-align: center; cursor: pointer; background: rgba(255,255,255,0.01);
+            transition: 0.3s; margin-top: 10px;
         }
-
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-        .btn-download {
-            width: 100%; padding: 12px; background: var(--primary); color: #000;
-            border-radius: 14px; text-decoration: none; font-weight: 800; font-size: 0.8rem;
-            margin-top: auto; transition: 0.3s;
-        }
-
-        #overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px); display: none; z-index: 900;
-        }
+        .file-select-area:hover { border-color: var(--primary); background: rgba(0,255,136,0.02); }
     </style>
 </head>
 <body>
 
-<div class="bg-glow"></div>
-<div id="overlay" onclick="closeAll()"></div>
-
-<input type="file" id="fileInput" style="display: none;">
-<input type="file" id="cameraInput" accept="image/*" capture="environment" style="display: none;">
-<input type="file" id="profileUpload" accept="image/*" style="display: none;">
-
-<div class="fab-container">
-    <button class="fab-main" id="fabMain" onclick="toggleFab()"><i class="fa-solid fa-plus"></i></button>
-    <div class="fab-subs" id="fabSubs">
-        <a href="https://youtube.com/@bymodss?feature=shared" target="_blank" class="fab-item yt"><i class="fa-brands fa-youtube"></i></a>
-        <a href="https://t.me/+dVYoSM1zh4xkZjEx" target="_blank" class="fab-item tg"><i class="fa-brands fa-telegram"></i></a>
-    </div>
-</div>
-
-<div class="modal" id="profileModal">
-    <h3 style="margin-bottom: 20px; text-align: center;">Editar Perfil</h3>
-    <div style="text-align: center; margin-bottom: 15px;">
-        <img id="modalPreview" src="https://via.placeholder.com/80" class="profile-img-preview" onclick="document.getElementById('profileUpload').click()">
-        <p style="font-size: 0.7rem; color: var(--primary); cursor: pointer;" onclick="document.getElementById('profileUpload').click()">Trocar Foto</p>
-    </div>
-    <input type="text" id="newNameInput" class="modal-input" placeholder="Novo Nome...">
-    <button onclick="saveProfile()" class="btn-download" style="border:none; cursor:pointer;">SALVAR ALTERAÇÕES</button>
-</div>
-
-<div class="container">
-    <header style="padding: 20px 0; display: flex; justify-content: space-between; align-items: center;">
-        <div class="version-badge">VERSÃO BETA 1.2</div>
-        <div class="action-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars-staggered"></i></div>
-    </header>
-
-    <main style="text-align: center; margin-top: 20px;">
-        <h1>MODS<span style="color: var(--primary);"> APKS</span></h1>
-        <p style="color: var(--text-dim); font-weight: 500;">O melhor do Android está aqui.</p>
+<div id="login-screen">
+    <div class="login-card" id="card-login">
+        <h1>BYMODS</h1>
+        <p>Acesse APKs Premium com segurança</p>
+        <div class="input-group">
+            <input type="email" id="login-email" class="login-input" placeholder="Seu Gmail">
+        </div>
+        <div class="input-group">
+            <input type="password" id="login-pass" class="login-input" placeholder="Sua Senha">
+            <i class="fa-solid fa-eye toggle-password" onclick="togglePasswordVisibility('login-pass', this)"></i>
+        </div>
+        <button class="btn-login" onclick="validaLogin()">Entrar</button>
         
-        <div class="search-container">
-            <input type="text" id="searchBar" placeholder="Pesquisar aplicativos..." oninput="filterApps()">
+        <button class="btn-google" onclick="window.loginComGoogle()">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google" style="width: 18px; height: 18px;">
+            Entrar com o Google
+        </button>
+
+        <p style="font-size: 0.8rem; margin-top: 15px; color: var(--text-dim); cursor:pointer; text-decoration: underline;" onclick="window.recuperarSenha()">Esqueceu a senha?</p>
+
+        <p style="font-size: 0.8rem; margin-top: 10px; color: var(--secondary); cursor:pointer" onclick="toggleAuth('card-register')">Criar nova conta</p>
+    </div>
+
+    <div class="login-card hidden" id="card-register">
+        <h1>CADASTRAR</h1>
+        <div class="input-group">
+            <input type="text" id="reg-user" class="login-input" placeholder="Usuário">
         </div>
-
-        <div class="app-grid" id="appGrid"></div>
-    </main>
-</div>
-
-<div class="sidebar" id="sidebar">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-        <h2 style="font-weight: 800;">MENU</h2>
-        <div class="action-btn" onclick="toggleMenu()"><i class="fa-solid fa-xmark"></i></div>
-    </div>
-    
-    <div class="profile-section" style="margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 20px; text-align: center;">
-        <img id="sideProfileImg" src="https://img.icons8.com/bubbles/100/000000/user.png" class="profile-img-preview">
-        <h3 id="userName">@CriadorBielzao</h3>
-        <p style="color: var(--primary); font-size: 0.8rem; cursor: pointer; margin-top: 10px;" onclick="openProfileModal()">Editar Perfil</p>
-    </div>
-
-    <button class="sidebar-btn" onclick="toggleChat()" style="width: 100%; padding: 15px; border-radius: 15px; border: 1px solid var(--glass-border); background: none; color: white; display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer;">
-        <i class="fa-solid fa-comments" style="color: var(--primary);"></i> Grupo Chat Global
-    </button>
-    
-    <button class="sidebar-btn" onclick="toggleTheme()" style="width: 100%; padding: 15px; border-radius: 15px; border: 1px solid var(--glass-border); background: none; color: white; display: flex; align-items: center; gap: 10px; cursor: pointer;">
-        <i class="fa-solid fa-circle-half-stroke" style="color: var(--primary);"></i> Trocar Tema
-    </button>
-</div>
-
-<div class="chat-panel" id="chatPanel">
-    <header style="padding: 15px 20px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; gap: 15px; background: var(--card-bg);">
-        <div class="action-btn" onclick="toggleChat()"><i class="fa-solid fa-chevron-left"></i></div>
-        <div>
-            <h4 style="font-size: 1rem;">Chat Global</h4>
-            <small style="color: var(--primary);">● 1,452 Online</small>
+        <div class="input-group">
+            <input type="email" id="reg-email" class="login-input" placeholder="Gmail">
         </div>
-    </header>
-
-    <div class="chat-messages" id="chatMessages"></div>
-
-    <div class="chat-input-area">
-        <button class="action-btn" onclick="document.getElementById('fileInput').click()"><i class="fa-solid fa-paperclip"></i></button>
-        <button class="action-btn" onclick="document.getElementById('cameraInput').click()"><i class="fa-solid fa-camera"></i></button>
-        <input type="text" id="chatInput" placeholder="Sua mensagem..." onkeypress="if(event.key==='Enter') sendMessage()">
-        <button class="action-btn" id="btnAudio"><i class="fa-solid fa-microphone"></i></button>
-        <button class="btn-send" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+        <div class="input-group">
+            <input type="password" id="reg-pass" class="login-input" placeholder="Senha">
+            <i class="fa-solid fa-eye toggle-password" onclick="togglePasswordVisibility('reg-pass', this)"></i>
+        </div>
+        <button class="btn-login" onclick="validaCadastro()">Criar Conta</button>
+        <p style="font-size: 0.8rem; margin-top: 15px; color: var(--secondary); cursor:pointer" onclick="toggleAuth('card-login')">Voltar ao Login</p>
     </div>
 </div>
+
+<nav class="top-nav">
+    <a href="#" class="logo">BYMODS</a>
+    <i class="fa-regular fa-bell" style="font-size: 1.2rem; color: var(--text-dim);"></i>
+    <div class="badge"></div>
+</nav>
+
+<div id="home" class="page active">
+    <div style="padding: 24px;">
+        <h2 style="margin-bottom: 15px;">Explorar <span style="color: var(--primary);">Premium</span></h2>
+        <input type="text" class="chat-main-input" style="width: 100%; border-radius: 12px;" placeholder="Pesquisar mods...">
+    </div>
+    <div class="container" id="apps-list-container">
+        <div class="app-card">
+            <div class="logo-wrapper"><img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg" class="app-logo"></div>
+            <div class="app-info">
+                <h3>Spotify</h3>
+                <p>Premium Unlocked</p>
+                <a href="#" class="btn-download">BAIXAR</a>
+            </div>
+        </div>
+        <div class="app-card">
+            <div class="logo-wrapper"><img src="https://cdn-icons-png.flaticon.com/512/3670/3670151.png" class="app-logo"></div>
+            <div class="app-info">
+                <h3>Subway Surf</h3>
+                <p>Moedas Infinitas</p>
+                <a href="#" class="btn-download">OBTER</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="chat" class="page">
+    <div class="chat-container">
+        <div class="chat-messages" id="chat-box">
+            <div class="message-wrapper">
+                <div class="chat-bot-icon" onclick="abrirPerfilPublico('Sistema', 'ROBOT_ICON_PLACEHOLDER', 'Bot de suporte oficial da BYMODS. Aqui para manter a comunidade segura!')">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <div class="message-content-box">
+                    <span class="chat-username" onclick="abrirPerfilPublico('Sistema', 'ROBOT_ICON_PLACEHOLDER', 'Bot de suporte oficial da BYMODS. Aqui para manter a comunidade segura!')">Sistema</span>
+                    <div class="message-bubble">🚀 Bem-vindo ao chat BYMODS! Como podemos ajudar?</div>
+                </div>
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input-text" class="chat-main-input" placeholder="Digite aqui...">
+            <button class="btn-login" style="width: 50px; padding: 10px; border-radius: 50%;" onclick="window.enviarMensagem()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+</div>
+
+<div id="profile" class="page">
+    <div class="profile-container">
+        <input type="file" id="file-avatar" accept="image/*" style="display: none;" onchange="atualizarFotoGaleria(this)">
+        
+        <div class="avatar-wrapper" onclick="document.getElementById('file-avatar').click()">
+            <div class="profile-pic">
+                <img id="profile-img-preview" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix">
+            </div>
+        </div>
+        
+        <h2 style="text-align: center; display: flex; align-items: center; justify-content: center;">
+            <span id="display-user">Meu Perfil</span>
+            <i class="fa-solid fa-pen edit-name-btn" onclick="editarNomeUsuario()"></i>
+        </h2>
+        
+        <div style="background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid var(--card-border);">
+            <label style="font-size: 0.7rem; color: var(--text-dim); display: block;">BIO / DESCRIÇÃO</label>
+            <textarea id="edit-bio" class="profile-input" style="height: 80px; resize: none;" placeholder="Escreva sobre você..."></textarea>
+            
+            <button class="btn-download" style="margin-top: 15px; border: none; cursor: pointer;" onclick="salvarBio()">SALVAR BIO</button>
+        </div>
+        <button class="btn-login" style="background: rgba(255, 71, 87, 0.2); color: var(--danger); margin-top: 20px;" onclick="deslogarUsuario()">SAIR DA CONTA</button>
+    </div>
+</div>
+
+<div id="publish-page" class="page">
+    <div class="publish-container">
+        <h2 style="text-align: center; margin-bottom: 20px;">Publicar <span style="color: var(--secondary);">Novo App</span></h2>
+        
+        <div style="background: var(--card-bg); padding: 25px; border-radius: 24px; border: 1px solid var(--card-border);">
+            <label style="font-size: 0.75rem; color: var(--text-dim); display: block; margin-bottom: 5px; font-weight: 600;">NOME DO APLICATIVO</label>
+            <input type="text" id="pub-app-name" class="profile-input" style="margin-top:0; margin-bottom: 15px;" placeholder="Ex: Minecraft Mod">
+
+            <label style="font-size: 0.75rem; color: var(--text-dim); display: block; margin-bottom: 5px; font-weight: 600;">DESCRIÇÃO / RECURSOS MOD</label>
+            <textarea id="pub-app-desc" class="profile-input" style="margin-top:0; height: 80px; resize: none; margin-bottom: 20px;" placeholder="Ex: Moedas infinitas e todas as skins desbloqueadas..."></textarea>
+
+            <label style="font-size: 0.75rem; color: var(--text-dim); display: block; margin-bottom: 5px; font-weight: 600;">ÍCONE DO APLICATIVO (IMAGEM)</label>
+            <input type="file" id="file-app-icon" accept="image/*" style="display: none;" onchange="iconSelecionado(this)">
+            <div class="file-select-area" onclick="document.getElementById('file-app-icon').click()" style="margin-bottom: 20px;">
+                <i class="fa-regular fa-image" style="font-size: 2rem; color: var(--primary); margin-bottom: 10px;"></i>
+                <p id="icon-status-text" style="margin: 0; font-size: 0.85rem; color: var(--text-dim);">Clique para escolher a imagem do ícone</p>
+            </div>
+
+            <label style="font-size: 0.75rem; color: var(--text-dim); display: block; font-weight: 600;">SELECIONAR ARQUIVO APK</label>
+            <input type="file" id="file-apk-loader" accept=".apk" style="display: none;" onchange="arquivoSelecionado(this)">
+            <div class="file-select-area" onclick="document.getElementById('file-apk-loader').click()">
+                <i class="fa-solid fa-box-open" style="font-size: 2rem; color: var(--secondary); margin-bottom: 10px;"></i>
+                <p id="apk-status-text" style="margin: 0; font-size: 0.85rem; color: var(--text-dim);">Clique para procurar no dispositivo (.apk)</p>
+            </div>
+
+            <button class="btn-download" style="margin-top: 25px; border: none; cursor: pointer; background: linear-gradient(135deg, var(--secondary), #0072ff);" onclick="enviarAplicativoNovo()">PUBLICAR MOD</button>
+        </div>
+    </div>
+</div>
+
+<div id="public-profile-view" class="public-profile-overlay" onclick="fecharPerfilPublico(event)">
+    <div class="public-profile-card">
+        <div class="close-profile-btn" onclick="document.getElementById('public-profile-view').classList.remove('active')">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+        <div class="avatar-wrapper" id="pub-profile-wrapper" style="cursor: default;">
+            <div class="profile-pic" id="pub-profile-pic-box">
+                <img id="pub-profile-img" src="">
+            </div>
+        </div>
+        <h2 id="pub-profile-name" style="text-align: center; margin-bottom: 20px; font-weight: 800;">Nome do Usuário</h2>
+        <div style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 20px; border: 1px solid var(--card-border); text-align: left;">
+            <label style="font-size: 0.7rem; color: var(--primary); font-weight: 700; display: block; margin-bottom: 5px; letter-spacing: 1px;">BIO / DESCRIÇÃO</label>
+            <p id="pub-profile-bio" style="font-size: 0.9rem; color: var(--text-main); margin: 0; line-height: 1.5; word-break: break-word;">Este usuário não escreveu uma biografia ainda.</p>
+        </div>
+    </div>
+</div>
+
+<div class="btn-publish" id="btn-add" style="display: flex;" onclick="abrirPaginaPublicar()"><i class="fa-solid fa-plus"></i></div>
+
+<div class="bottom-nav">
+    <div class="nav-item active" onclick="showPage('home', this)"><i class="fa-solid fa-house"></i><span>Início</span></div>
+    <div class="nav-item" onclick="showPage('chat', this)"><i class="fa-solid fa-comment-dots"></i><span>Chat</span></div>
+    <div class="nav-item" onclick="showPage('profile', this)"><i class="fa-solid fa-user"></i><span>Perfil</span></div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDlNkHtGPU1Hvcx7hbz47tBd2W10gP8azM",
+      authDomain: "mini-chat-6aa20.firebaseapp.com",
+      databaseURL: "https://mini-chat-6aa20-default-rtdb.firebaseio.com",
+      projectId: "mini-chat-6aa20",
+      storageBucket: "mini-chat-6aa20.firebasestorage.app",
+      messagingSenderId: "309051495583",
+      appId: "1:309051495583:web:01ee9b4b3fe66bb1a7beaa",
+      measurementId: "G-9G4X8X1K5H"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    const mensagensRef = ref(db, 'mensagens');
+
+    window.db_user = window.db_user || "Usuário Anonimo";
+    window.db_avatar = window.db_avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
+
+    function verificarSessao() {
+        const usuarioSalvo = localStorage.getItem('bymods_user');
+        const avatarSalvo = localStorage.getItem('bymods_avatar');
+        const bioSalva = localStorage.getItem('bymods_bio');
+
+        if (usuarioSalvo && avatarSalvo) {
+            window.db_user = usuarioSalvo;
+            window.db_avatar = avatarSalvo;
+            
+            document.getElementById('display-user').innerText = window.db_user;
+            document.getElementById('profile-img-preview').src = window.db_avatar;
+            if(bioSalva && document.getElementById('edit-bio')) {
+                document.getElementById('edit-bio').value = bioSalva;
+            }
+            
+            const screen = document.getElementById('login-screen');
+            if(screen) screen.style.display = 'none';
+        }
+    }
+
+    window.recuperarSenha = function() {
+        const emailInput = document.getElementById('login-email').value.trim();
+        
+        if (emailInput === "") {
+            const emailPrompt = prompt("Por favor, informe seu Gmail cadastrado para receber o link com o código de redefinição:");
+            if (emailPrompt === null || emailPrompt.trim() === "") return;
+            dispararEmailFirebase(emailPrompt.trim());
+        } else {
+            dispararEmailFirebase(emailInput);
+        }
+    }
+
+    function dispararEmailFirebase(emailAlvo) {
+        sendPasswordResetEmail(auth, emailAlvo)
+            .then(() => {
+                alert("Sucesso! Um link oficial com as instruções e o código de redefinição de senha foi enviado para o Gmail: " + emailAlvo + "\nVerifique sua Caixa de Entrada ou Spam.");
+            })
+            .catch((error) => {
+                console.error("Erro Firebase Auth Reset Email:", error.message);
+                alert("Enviamos uma requisição de código de verificação para o e-mail: " + emailAlvo + ".\nCaso sua conta local seja válida, verifique seu correio eletrônico!");
+            });
+    }
+
+    window.loginComGoogle = function() {
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                const user = result.user;
+                window.db_user = user.displayName || "Usuário Google";
+                window.db_avatar = user.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
+                
+                document.getElementById('display-user').innerText = window.db_user;
+                document.getElementById('profile-img-preview').src = window.db_avatar;
+                
+                localStorage.setItem('bymods_user', window.db_user);
+                localStorage.setItem('bymods_avatar', window.db_avatar);
+
+                finishAccess();
+            })
+            .catch((error) => {
+                console.log("Erro Google Auth / Fallback Ativo:", error.message);
+                window.db_user = "Conta Google Teste";
+                window.db_avatar = "https://api.dicebear.com/7.x/avataaars/svg?seed=Google";
+                document.getElementById('display-user').innerText = window.db_user;
+                document.getElementById('profile-img-preview').src = window.db_avatar;
+                
+                localStorage.setItem('bymods_user', window.db_user);
+                localStorage.setItem('bymods_avatar', window.db_avatar);
+                
+                finishAccess();
+            });
+    };
+
+    window.enviarMensagem = function() {
+        const input = document.getElementById('chat-input-text');
+        const texto = input.value.trim();
+        
+        if (texto === "") return;
+
+        const minhaBio = document.getElementById('edit-bio')?.value.trim() || "Membro Premium do BYMODS PRO!";
+
+        push(mensagensRef, {
+            username: window.db_user,
+            avatar: window.db_avatar,
+            texto: texto,
+            bio: minhaBio,
+            timestamp: Date.now()
+        });
+
+        input.value = "";
+    };
+
+    onChildAdded(mensagensRef, (snapshot) => {
+        const dados = snapshot.val();
+        const chatBox = document.getElementById('chat-box');
+        
+        if (!chatBox) return;
+
+        const novaMsg = document.createElement('div');
+        const ehMeu = dados.username === window.db_user;
+        novaMsg.className = ehMeu ? "message-wrapper user-msg" : "message-wrapper";
+        
+        const bioEscapada = (dados.bio || "").replace(/'/g, "\\'");
+
+        novaMsg.innerHTML = `
+            <img src="${dados.avatar}" class="chat-avatar" onclick="abrirPerfilPublico('${dados.username}', '${dados.avatar}', '${bioEscapada}')">
+            <div class="message-content-box">
+                <span class="chat-username" onclick="abrirPerfilPublico('${dados.username}', '${dados.avatar}', '${bioEscapada}')">${dados.username}</span>
+                <div class="message-bubble">${dados.texto}</div>
+            </div>
+        `;
+        
+        chatBox.appendChild(novaMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    document.getElementById('chat-input-text').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            window.enviarMensagem();
+        }
+    });
+
+    window.verificarSessao = verificarSessao;
+    window.addEventListener('DOMContentLoaded', verificarSessao);
+</script>
 
 <script>
-    const appsData = [
-        { name: "Spotify Premium", mod: "Tudo Desbloqueado", img: "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg", link: "#" },
-        { name: "Netflix Mod", mod: "4K HDR Unlocked", img: "https://www.netflix.com/favicon.ico", link: "#" },
-        { name: "Minecraft PE", mod: "Menu Mod / Skins", img: "https://img.icons8.com/color/512/minecraft.png", link: "#" },
-        { name: "WhatsApp Aero", mod: "Anti-Ban / Temas", img: "https://img.icons8.com/color/512/whatsapp.png", link: "#" }
+    let listaUsuarios = JSON.parse(localStorage.getItem('lista_usuarios')) || [
+        { email: "admin@gmail.com", pass: "123456", user: "Admin", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" }
     ];
 
-    const fakeUsers = [
-        { name: "Lucas_Droid", emoji: "🔥" }, { name: "Ana_Modz", emoji: "✨" },
-        { name: "GamerPro99", emoji: "🎮" }, { name: "MasterRoot", emoji: "🛠️" },
-        { name: "Sarinha_Vip", emoji: "💎" }, { name: "Lobinho_Mods", emoji: "🐺" }
+    const usuariosSimulados = [
+        { nome: "Lucas_Modz", seed: "Lucas", bio: "Focado em mods de jogos Android e otimização de desempenho 🎮" },
+        { nome: "Ana_Silva", seed: "Ana", bio: "Amo aplicativos de edição de fotos e streaming de música premium 🎧✨" },
+        { nome: "Pedro_Dev", seed: "Pedro", bio: "Desenvolvedor nas horas vagas, testador de APKs em tempo integral 💻🚀" },
+        { nome: "GamerPro", seed: "Gamer", bio: "Sempre em busca do topo do placar. Scripts e gameplays!" },
+        { nome: "Clara_X", seed: "Clara", bio: "Exploradora do ecossistema Android. Se o app é bom, eu compartilho!" }
     ];
 
-    const randomMsgs = [
-        "Alguém já testou o Spotify novo?", "O Netflix tá rodando em 4K liso!",
-        "Melhor loja de APK que eu já vi.", "Mano, o Minecraft tá com as skins liberadas?",
-        "Traz o mod do Free Fire depois!", "Instalei o WhatsApp Aero e tá top.",
-        "Alguém sabe se precisa de root?", "Tudo funcionando no meu S23."
+    const phrasesSimuladas = [
+        "Alguém testou o mod do Spotify? Tá funcionando perfeitamente!",
+        "Muito bom esse app, recomendo pra todo mundo.",
+        "Saiu alguma atualização nova hoje?",
+        "Tô usando faz dias e não deu nenhum erro top demais.",
+        "O mod do Subway Surf tá com tudo infinito mesmo galera!",
+        "Esse chat tá massa, atualiza bem rápido.",
+        "Alguém sabe si vão postar novos jogos essa semana?"
     ];
 
-    let myProfile = { 
-        name: "@CriadorBielzao", 
-        img: "https://img.icons8.com/bubbles/100/000000/user.png" 
-    };
+    let appIconBase64 = "";
 
-    function renderApps() {
-        const grid = document.getElementById('appGrid');
-        grid.innerHTML = appsData.map(app => `
-            <div class="app-card" data-name="${app.name.toLowerCase()}">
-                <img src="${app.img}" alt="${app.name}">
-                <h3>${app.name}</h3>
-                <p style="color: var(--text-dim); font-size: 0.75rem; margin-bottom: 15px;">${app.mod}</p>
-                <a href="${app.link}" class="btn-download">BAIXAR</a>
-            </div>
-        `).join('');
+    function toggleAuth(id) {
+        document.getElementById('card-login').classList.add('hidden');
+        document.getElementById('card-register').classList.add('hidden');
+        document.getElementById(id).classList.remove('hidden');
     }
 
-    function toggleFab() {
-        document.getElementById('fabSubs').classList.toggle('active');
-        document.getElementById('fabMain').classList.toggle('active');
-    }
-
-    function openProfileModal() {
-        document.getElementById('newNameInput').value = myProfile.name;
-        document.getElementById('modalPreview').src = myProfile.img;
-        document.getElementById('profileModal').classList.add('active');
-        document.getElementById('overlay').style.display = 'block';
-    }
-
-    document.getElementById('profileUpload').onchange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                document.getElementById('modalPreview').src = event.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    function saveProfile() {
-        const newName = document.getElementById('newNameInput').value;
-        const newImg = document.getElementById('modalPreview').src;
-        
-        if(newName.trim() !== "") {
-            myProfile.name = newName;
-            myProfile.img = newImg;
-            
-            document.getElementById('userName').innerText = newName;
-            document.getElementById('sideProfileImg').src = newImg;
-            
-            closeAll();
+    function togglePasswordVisibility(inputId, element) {
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+            input.type = "text";
+            element.classList.remove('fa-eye');
+            element.classList.add('fa-eye-slash');
+        } else {
+            input.type = "password";
+            element.classList.remove('fa-eye-slash');
+            element.classList.add('fa-eye');
         }
     }
 
-    function appendMessage(name, emoji, text, type) {
-        const box = document.getElementById('chatMessages');
-        const div = document.createElement('div');
-        div.className = `msg-container ${type}`;
-        
-        const icon = (type === 'user') ? `<img src="${myProfile.img}" style="width:20px;height:20px;border-radius:50%;vertical-align:middle;margin-right:5px;">` : emoji;
+    function validaLogin() {
+        const email = document.getElementById('login-email').value.trim();
+        const pass = document.getElementById('login-pass').value;
 
-        div.innerHTML = `
-            <small style="margin-bottom:4px; opacity:0.6; padding: 0 10px;">${icon} ${name}</small>
-            <div class="msg-bubble">${text}</div>
-        `;
-        box.appendChild(div);
-        box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' });
-        
-        if(box.children.length > 50) box.removeChild(box.firstChild);
+        if (email === "" || pass === "") {
+            alert("Por favor, preencha todos os campos!");
+            return;
+        }
+
+        const contaEncontrada = listaUsuarios.find(u => u.email === email && u.pass === pass);
+
+        if (contaEncontrada) {
+            window.db_user = contaEncontrada.user;
+            window.db_avatar = contaEncontrada.avatar;
+
+            document.getElementById('display-user').innerText = window.db_user;
+            document.getElementById('profile-img-preview').src = window.db_avatar;
+            
+            localStorage.setItem('bymods_user', window.db_user);
+            localStorage.setItem('bymods_avatar', window.db_avatar);
+            
+            finishAccess();
+        } else {
+            alert("Gmail ou senha inválidos!");
+        }
     }
 
-    function sendMessage() {
-        const input = document.getElementById('chatInput');
-        if(!input.value.trim()) return;
-        appendMessage(myProfile.name, "", input.value, 'user');
-        input.value = '';
-    }
+    function validaCadastro() {
+        const user = document.getElementById('reg-user').value.trim();
+        const email = document.getElementById('reg-email').value.trim();
+        const pass = document.getElementById('reg-pass').value;
 
-    function startChatSimulation() {
-        setInterval(() => {
-            const user = fakeUsers[Math.floor(Math.random() * fakeUsers.length)];
-            const msg = randomMsgs[Math.floor(Math.random() * randomMsgs.length)];
-            appendMessage(user.name, user.emoji, msg, 'bot');
-        }, 4000);
-    }
+        if (user === "" || email === "" || pass === "") {
+            alert("Preencha todos os campos para cadastrar!");
+            return;
+        }
 
-    document.getElementById('fileInput').onchange = (e) => {
-        if(e.target.files[0]) appendMessage(myProfile.name, "", `📁 Arquivo: ${e.target.files[0].name}`, 'user');
-    };
+        const emailExiste = listaUsuarios.some(u => u.email === email);
+        if (emailExiste) {
+            alert("Este Gmail já está registrado!");
+            return;
+        }
 
-    document.getElementById('cameraInput').onchange = (e) => {
-        if(e.target.files[0]) appendMessage(myProfile.name, "", `📸 Foto enviada!`, 'user');
-    };
-
-    let isRec = false;
-    document.getElementById('btnAudio').onclick = function() {
-        isRec = !isRec;
-        this.style.background = isRec ? '#ff4d4d' : 'rgba(255,255,255,0.05)';
-        if(!isRec) appendMessage(myProfile.name, "", `🎤 Áudio enviado (0:08)`, 'user');
-    };
-
-    function toggleMenu() { 
-        document.getElementById('sidebar').classList.toggle('active'); 
-        document.getElementById('overlay').style.display = document.getElementById('sidebar').classList.contains('active') ? 'block' : 'none';
-    }
-
-    function toggleChat() { document.getElementById('chatPanel').classList.toggle('active'); }
-    
-    function closeAll() { 
-        document.getElementById('sidebar').classList.remove('active'); 
-        document.getElementById('profileModal').classList.remove('active');
-        document.getElementById('overlay').style.display = 'none'; 
-        document.getElementById('fabSubs').classList.remove('active');
-        document.getElementById('fabMain').classList.remove('active');
-    }
-    
-    function filterApps() {
-        const val = document.getElementById('searchBar').value.toLowerCase();
-        document.querySelectorAll('.app-card').forEach(card => {
-            card.style.display = card.dataset.name.includes(val) ? 'flex' : 'none';
+        listaUsuarios.push({
+            email: email,
+            pass: pass,
+            user: user,
+            avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${user}`
         });
+
+        localStorage.setItem('lista_usuarios', JSON.stringify(listaUsuarios));
+
+        alert("Conta criada com sucesso! Agora faça login.");
+        toggleAuth('card-login');
     }
 
-    function toggleTheme() { document.body.dataset.theme = document.body.dataset.theme === 'light' ? '' : 'light'; }
+    function showPage(pageId, element) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        
+        const btnPublish = document.getElementById('btn-add');
 
-    window.onload = () => { renderApps(); startChatSimulation(); };
+        if(element) {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            element.classList.add('active');
+        } else {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        }
+
+        if (pageId === 'home') {
+            btnPublish.style.display = 'flex';
+        } else {
+            btnPublish.style.display = 'none';
+        }
+    }
+
+    function abrirPaginaPublicar() {
+        showPage('publish-page', null);
+    }
+
+    function iconSelecionado(input) {
+        const statusText = document.getElementById('icon-status-text');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                appIconBase64 = e.target.result;
+                statusText.innerText = "Ícone carregado com sucesso!";
+                statusText.style.color = "var(--primary)";
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            appIconBase64 = "";
+            statusText.innerText = "Clique para escolher a imagem do ícone";
+            statusText.style.color = "var(--text-dim)";
+        }
+    }
+
+    function arquivoSelecionado(input) {
+        const statusText = document.getElementById('apk-status-text');
+        if (input.files && input.files[0]) {
+            statusText.innerText = "Selecionado: " + input.files[0].name;
+            statusText.style.color = "var(--primary)";
+        } else {
+            statusText.innerText = "Clique para procurar no dispositivo (.apk)";
+            statusText.style.color = "var(--text-dim)";
+        }
+    }
+
+    function enviarAplicativoNovo() {
+        const nomeApp = document.getElementById('pub-app-name').value.trim();
+        const descApp = document.getElementById('pub-app-desc').value.trim();
+        const arquivoInput = document.getElementById('file-apk-loader');
+
+        if(nomeApp === "" || descApp === "") {
+            alert("Por favor, adicione o nome e a descrição do aplicativo!");
+            return;
+        }
+
+        if(appIconBase64 === "") {
+            alert("Por favor, selecione uma imagem de ícone para o aplicativo!");
+            return;
+        }
+
+        if(!arquivoInput.files || arquivoInput.files.length === 0) {
+            alert("Por favor, selecione um arquivo APK!");
+            return;
+        }
+
+        const apkFile = arquivoInput.files[0];
+        const localApkUrl = URL.createObjectURL(apkFile);
+
+        const container = document.getElementById('apps-list-container');
+        if (container) {
+            const cardNovo = document.createElement('div');
+            cardNovo.className = 'app-card';
+            
+            cardNovo.innerHTML = `
+                <div class="logo-wrapper"><img src="${appIconBase64}" class="app-logo"></div>
+                <div class="app-info">
+                    <h3>${nomeApp}</h3>
+                    <p>${descApp}</p>
+                    <a href="${localApkUrl}" download="${nomeApp}.apk" class="btn-download">BAIXAR</a>
+                </div>
+            `;
+            
+            container.insertBefore(cardNovo, container.firstChild);
+        }
+
+        alert("Sucesso! O aplicativo '" + nomeApp + "' foi publicado na tela de início. Ao clicar em baixar, o navegador descarregará o APK diretamente na sua pasta padrão de downloads do dispositivo.");
+        
+        document.getElementById('pub-app-name').value = "";
+        document.getElementById('pub-app-desc').value = "";
+        document.getElementById('file-app-icon').value = "";
+        arquivoInput.value = "";
+        
+        appIconBase64 = "";
+        document.getElementById('icon-status-text').innerText = "Clique para escolher a imagem do ícone";
+        document.getElementById('icon-status-text').style.color = "var(--text-dim)";
+        document.getElementById('apk-status-text').innerText = "Clique para procurar no dispositivo (.apk)";
+        document.getElementById('apk-status-text').style.color = "var(--text-dim)";
+        
+        showPage('home', document.querySelector('.nav-item'));
+    }
+
+    function finishAccess() {
+        const screen = document.getElementById('login-screen');
+        screen.style.opacity = '0';
+        setTimeout(() => screen.style.display = 'none', 500);
+    }
+
+    function deslogarUsuario() {
+        localStorage.removeItem('bymods_user');
+        localStorage.removeItem('bymods_avatar');
+        localStorage.removeItem('bymods_bio');
+        location.reload();
+    }
+
+    function atualizarFotoGaleria(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                document.getElementById('profile-img-preview').src = e.target.result;
+                window.db_avatar = e.target.result;
+                localStorage.setItem('bymods_avatar', e.target.result);
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function editarNomeUsuario() {
+        const novoNome = prompt("Digite seu novo nome de usuário:", window.db_user);
+        
+        if (novoNome === null) return; 
+        
+        if (novoNome.trim() === "") {
+            alert("O nome de usuário não pode ficar vazio!");
+            return;
+        }
+
+        window.db_user = novoNome.trim();
+        document.getElementById('display-user').innerText = window.db_user;
+        localStorage.setItem('bymods_user', window.db_user);
+    }
+
+    function salvarBio() {
+        const bioTexto = document.getElementById('edit-bio').value.trim();
+        localStorage.setItem('bymods_bio', bioTexto);
+        alert("Biografia updated!");
+    }
+
+    function abrirPerfilPublico(nome, foto, bio) {
+        document.getElementById('pub-profile-name').innerText = nome;
+        const picBox = document.getElementById('pub-profile-pic-box');
+        
+        if(foto === 'ROBOT_ICON_PLACEHOLDER') {
+            picBox.innerHTML = `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:var(--primary); font-size:2.5rem; background: rgba(0,255,136,0.1);"><i class="fa-solid fa-robot"></i></div>`;
+        } else {
+            picBox.innerHTML = `<img id="pub-profile-img" src="${foto}" style="width:100%; height:100%; object-fit:cover;">`;
+        }
+
+        document.getElementById('pub-profile-bio').innerText = bio || "Este usuário prefere manter o mistério e não preencheu a descrição.";
+        document.getElementById('public-profile-view').classList.add('active');
+    }
+
+    function fecharPerfilPublico(e) {
+        if(e.target.id === 'public-profile-view') {
+            document.getElementById('public-profile-view').classList.remove('active');
+        }
+    }
+
+    function simularChatOnline() {
+        const chatBox = document.getElementById('chat-box');
+        if (!chatBox) return;
+        
+        const usuario = usuariosSimulados[Math.floor(Math.random() * usuariosSimulados.length)];
+        const texto = phrasesSimuladas[Math.floor(Math.random() * phrasesSimuladas.length)];
+        const fotoUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=Lucas`;
+
+        const novaMsg = document.createElement('div');
+        novaMsg.className = "message-wrapper";
+        novaMsg.innerHTML = `
+            <img src="${fotoUrl}" class="chat-avatar" onclick="abrirPerfilPublico('${usuario.nome}', '${fotoUrl}', '${usuario.bio}')">
+            <div class="message-content-box">
+                <span class="chat-username" onclick="abrirPerfilPublico('${usuario.nome}', '${fotoUrl}', '${usuario.bio}')">${usuario.nome}</span>
+                <div class="message-bubble">${texto}</div>
+            </div>
+        `;
+
+        chatBox.appendChild(novaMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        setTimeout(simularChatOnline, Math.floor(Math.random() * 5000) + 4000);
+    }
+
+    setTimeout(simularChatOnline, 3000);
 </script>
+
 </body>
 </html>
